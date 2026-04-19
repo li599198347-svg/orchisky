@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-orchisky-ppt constants.py
-需要 python-pptx：pip install python-pptx --break-system-packages
+Orchisky PPT 工具链常量定义
+所有颜色、字体、尺寸的唯一真相来源
 """
 from pptx.util import Inches, Pt, Emu
 from pptx.dml.color import RGBColor
@@ -23,16 +23,13 @@ GRAY_F5    = RGBColor(0xF5, 0xF5, 0xF5)
 WHITE      = RGBColor(0xFF, 0xFF, 0xFF)
 RED        = RGBColor(0xB0, 0x1C, 0x1C)
 GREEN      = RGBColor(0x1A, 0x7A, 0x42)
+INFO_BG    = RGBColor(0xE8, 0xF0, 0xFA)
 
 # 字体
 FONT_SANS  = 'Microsoft YaHei'
-FONT_SERIF = '宋体-简'
+FONT_SERIF = 'Songti SC'
 
-# 间距
-MARGIN_X = Inches(0.31)
-CONTENT_TOP = Inches(1.09)
-
-# 工具
+# 工具函数
 PX = 9525
 
 def px(n):
