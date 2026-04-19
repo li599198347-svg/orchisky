@@ -1,60 +1,41 @@
 # Layout Impl · T系版式实现（过渡（Transition））
 
 > Phase 7 按版式ID读取本文件获取坐标和实现细节。
-> 坐标权威来源：grid-system.md。
 
 ---
 
-## T系总览
+## T1 · 节动封面
 
-T系 = 过渡型版式。用于章节间隔、议题切换、过渡页。
+```
+背景色块：x=0, y=0, width=960, height=540
+  fill=brand-primary, opacity=0.08
 
-| 版式ID | 名称 | 适用场景 |
-|--------|------|----------|
-| T-1 | 章节过渡 | 章节开头页 |
-| T-2 | 议题切换 | 议题过渡页 |
-| T-3 | 全号提问 | 以问题引入新议题 |
+左侧竖边块：x=0, y=0, width=8, height=540
+  fill=brand-primary
 
----
+章节编号（大号水印）：
+  x=480, y=220, text-anchor=middle
+  font-size=64px, Bold, fill=brand-primary, opacity=0.15
 
-## T-1 章节过渡
+章节标题：
+  x=480, y=290, text-anchor=middle
+  font-size=28px, Bold, near-black
 
-```svg
-<!-- 左侧蓝色块 -->
-<rect x="0" y="0" width="480" height="720" fill="#003D7A"/>
-
-<!-- 章节序号 -->
-<text x="60" y="240" font-size="80" font-weight="bold"
-      fill="rgba(255,255,255,.15)">[N]</text>
-
-<!-- 章节标题 -->
-<text x="60" y="340" font-family="Songti SC,SimSun,serif"
-      font-size="36" font-weight="bold" fill="#FFFFFF">[chapter_title]</text>
-
-<!-- 右侧内容预览 -->
-<text x="540" y="320" font-size="14" fill="#888">本章要点</text>
-<text x="540" y="360" font-size="14" fill="#333">• [point_1]</text>
-<text x="540" y="390" font-size="14" fill="#333">• [point_2]</text>
-<text x="540" y="420" font-size="14" fill="#333">• [point_3]</text>
+章节副题（可选）：
+  x=480, y=330, text-anchor=middle
+  font-size=15px, gray
 ```
 
-**信息密度**：35%
+## T2 · 章节目录
 
-## T-2 议题切换
-
-```svg
-<!-- 项目名称 -->
-<text x="640" y="300" text-anchor="middle"
-      font-family="Songti SC,SimSun,serif"
-      font-size="48" font-weight="bold" fill="#1A1A1A">[topic_title]</text>
-
-<!-- 进度指示 -->
-<text x="640" y="380" text-anchor="middle"
-      font-size="13" fill="#888" letter-spacing="4">[current] / [total]</text>
 ```
+标题区：
+  x=40, y=150, font-size=24px Bold, near-black
+  "本章内容"
 
-**信息密度**：20%
-
----
-
-*坐标权威来源：grid-system.md · SVG骨架：svg-skeleton-t.md*
+条目列表（y=210起，每条40px行高）：
+  编号圈 cx=52, r=12, fill=brand-primary（当前章）/ #E0E0E0（其他）
+  编号 12px Bold 白色 居中
+  文字 x=76, 14px near-black
+  当前章文字加粗 + fill=brand-primary
+```
