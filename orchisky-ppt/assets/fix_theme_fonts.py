@@ -1,32 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-⚠️ LEGACY · V3.0 老路径资产 · V4.0 不主动加载
-如需使用，请通过 svg_to_pptx_wrapper.py 调用。
+⚠️ LEGACY · V3.0 老路径资产 · V4.0 不主推使用
+
+当 SVG → PPT 转换需求出现时,请使用:
+  /mnt/skills/user/orchisky-ppt/assets/svg_to_pptx_wrapper.py
+
+本文件保留,仅供以下场景参考:
+- 零散快速拼几个形状(<10 个元素)
+- 无 SVG 源时手工构造 PPT 页
+- 了解 V3.0 的扁平化主题思路
+
+具体见 references/engineering-lessons.md 场景 22 的说明。
 """
 
-from pptx import Presentation
-from pptx.util import Pt
-import copy
+from apply_orchisky_theme import apply_orchisky_theme, fix_theme_fonts
 
-def fix_theme_fonts(input_path: str, output_path: str = None) -> None:
-    """修复 PPTX 中的主题字体映射，确保中文字体正确显示。"""
-    if output_path is None:
-        output_path = input_path
-    
-    prs = Presentation(input_path)
-    
-    for slide in prs.slides:
-        for shape in slide.shapes:
-            if shape.has_text_frame:
-                for para in shape.text_frame.paragraphs:
-                    for run in para.runs:
-                        if run.font.name in ('Songti SC', 'PingFang SC', None):
-                            run.font.name = 'Microsoft YaHei'
-    
-    prs.save(output_path)
-    print(f"Fixed fonts: {output_path}")
-
-if __name__ == '__main__':
-    import sys
-    if len(sys.argv) >= 2:
-        fix_theme_fonts(sys.argv[1], sys.argv[2] if len(sys.argv) >= 3 else None)
+__all__ = ['apply_orchisky_theme', 'fix_theme_fonts']
