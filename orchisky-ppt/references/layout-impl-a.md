@@ -1,59 +1,49 @@
 # Layout Impl · A系版式实现（动作（Action））
 
-> Phase 7 按版式ID读取本文件获取坐标和设计要求。
+> Phase 7 按版式ID读取本文件获取坐标和实现细节。
+> 坐标权威来源：grid-system.md。
+> SVG骨架代码：svg-skeleton-a.md。
 
 ---
 
-## A1 · 封面页
+## A-01 下一步三步决策
+
+**适用**：行动清单、实施路线
 
 ```
-封面标题：
-  x=40, y=200, width=600
-  font-size: 36px, Bold
-  fill: var(--brand-near-black)
-
-副标题：
-  x=40, y=260, width=600
-  font-size: 18px, Regular
-  fill: var(--brand-gray-medium)
-
-汇报日期和报告人：
-  x=40, y=340
-  font-size: 13px
-  fill: var(--brand-gray-light)
-
-装饰条：
-  x=40, y=380, width=120, height=3
-  fill: var(--brand-primary)
+三张步骤卡，x=40/456/872，y=200，w=400，h=360
+左侧蓝条 4px，背景 #F5F5F5
+标头：11px #003D7A 字母七
+标题：22px Songti SC
+详情：13px #555
 ```
 
-## A2 · 过渡页
+**信息密度**：60%
+
+## A-02 是/否选择矩阵
+
+**适用**：决策二选一、门控条件判断
 
 ```
-大标题：
-  x=40, y=220, width=880
-  font-size: 28px, Bold, 居中对齐
-  fill: var(--brand-near-black)
-
-左侧竖线（常规 Chrome）已包含 Action Title 竖线
-内容区居中显示
+上半：x=40 y=140 w=1200 h=240 fill=#E8F0FA 左侧蓝条
+下半：x=40 y=420 w=1200 h=240 fill=#F5F5F5 左侧灰条
+OPTION A 推荐，OPTION B 备选
 ```
 
-## A3 · 总结页
+**信息密度**：55%
+
+## A-03 责任矩阵
+
+**适用**：行动 + 责任方 + 截止时间 表格
 
 ```
-结论标题：
-  x=40, y=160, width=880, text-anchor=middle
-  font-size: 24px, Bold
-  fill: var(--brand-near-black)
-
-核心行动号召：
-  x=40, y=240
-  font-size: 16px
-  fill: var(--brand-primary)
-
-联系方式区：
-  x=40, y=380
-  font-size: 12px
-  fill: var(--brand-gray-medium)
+表头：x=40 y=140 w=1200 h=44 fill=#1A1A1A
+列：行动x=60 责任方x=660 截止x=960
+N行，每行y递增60，交替#FAFAFA/#F5F5F5
 ```
+
+**信息密度**：65%
+
+---
+
+*坐标权威来源：grid-system.md · SVG骨架：svg-skeleton-a.md*
