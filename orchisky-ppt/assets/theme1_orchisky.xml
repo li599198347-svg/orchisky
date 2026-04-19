@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="Orchisky">
+<a:themeElements>
+<a:clrScheme name="Orchisky">
+<a:dk1><a:srgbClr val="1A1A1A"/></a:dk1>
+<a:lt1><a:srgbClr val="FFFFFF"/></a:lt1>
+<a:dk2><a:srgbClr val="003D7A"/></a:dk2>
+<a:lt2><a:srgbClr val="E8F0FA"/></a:lt2>
+<a:accent1><a:srgbClr val="003D7A"/></a:accent1>
+<a:accent2><a:srgbClr val="0056A8"/></a:accent2>
+<a:accent3><a:srgbClr val="3A7FC1"/></a:accent3>
+<a:accent4><a:srgbClr val="A8C8ED"/></a:accent4>
+<a:accent5><a:srgbClr val="1A7A42"/></a:accent5>
+<a:accent6><a:srgbClr val="B01C1C"/></a:accent6>
+<a:hlink><a:srgbClr val="003D7A"/></a:hlink>
+<a:folHlink><a:srgbClr val="0056A8"/></a:folHlink>
+</a:clrScheme>
+<a:fontScheme name="Orchisky">
+<a:majorFont>
+<a:latin typeface="Songti SC"/>
+<a:ea typeface="Songti SC"/>
+<a:cs typeface="Songti SC"/>
+<a:font script="Hans" typeface="Songti SC"/>
+<a:font script="Hant" typeface="新細明體"/>
+<a:font script="Jpan" typeface="ＭＳ Ｐゴシック"/>
+<a:font script="Hang" typeface="맑은 고딕"/>
+</a:majorFont>
+<a:minorFont>
+<a:latin typeface="Microsoft YaHei"/>
+<a:ea typeface="Microsoft YaHei"/>
+<a:cs typeface="Microsoft YaHei"/>
+<a:font script="Hans" typeface="Microsoft YaHei"/>
+<a:font script="Hant" typeface="新細明體"/>
+<a:font script="Jpan" typeface="ＭＳ Ｐゴシック"/>
+<a:font script="Hang" typeface="맑은 고딕"/>
+</a:minorFont>
+</a:fontScheme>
+<a:fmtScheme name="Orchisky">
+<a:fillStyleLst>
+<a:solidFill><a:schemeClr val="phClr"/></a:solidFill>
+<a:solidFill><a:schemeClr val="phClr"><a:tint val="60000"/></a:schemeClr></a:solidFill>
+<a:solidFill><a:schemeClr val="phClr"><a:shade val="80000"/></a:schemeClr></a:solidFill>
+</a:fillStyleLst>
+<a:lnStyleLst>
+<a:ln w="6350" cap="flat" cmpd="sng" algn="ctr">
+<a:solidFill><a:schemeClr val="phClr"/></a:solidFill>
+<a:prstDash val="solid"/>
+<a:miter lim="800000"/>
+</a:ln>
+<a:ln w="12700" cap="flat" cmpd="sng" algn="ctr">
+<a:solidFill><a:schemeClr val="phClr"/></a:solidFill>
+<a:prstDash val="solid"/>
+<a:miter lim="800000"/>
+</a:ln>
+<a:ln w="19050" cap="flat" cmpd="sng" algn="ctr">
+<a:solidFill><a:schemeClr val="phClr"/></a:solidFill>
+<a:prstDash val="solid"/>
+<a:miter lim="800000"/>
+</a:ln>
+</a:lnStyleLst>
+<a:effectStyleLst>
+<a:effectStyle><a:effectLst/></a:effectStyle>
+<a:effectStyle><a:effectLst/></a:effectStyle>
+<a:effectStyle><a:effectLst/></a:effectStyle>
+</a:effectStyleLst>
+<a:bgFillStyleLst>
+<a:solidFill><a:schemeClr val="phClr"/></a:solidFill>
+<a:solidFill><a:schemeClr val="phClr"><a:tint val="95000"/></a:schemeClr></a:solidFill>
+<a:solidFill><a:schemeClr val="phClr"><a:shade val="95000"/></a:schemeClr></a:solidFill>
+</a:bgFillStyleLst>
+</a:fmtScheme>
+</a:themeElements>
+<a:objectDefaults>
+<a:spDef>
+<a:spPr/><a:bodyPr/><a:lstStyle/>
+<a:style>
+<a:lnRef idx="0"><a:schemeClr val="accent1"/></a:lnRef>
+<a:fillRef idx="1"><a:schemeClr val="accent1"/></a:fillRef>
+<a:effectRef idx="0"><a:schemeClr val="accent1"/></a:effectRef>
+<a:fontRef idx="minor"><a:schemeClr val="lt1"/></a:fontRef>
+</a:style>
+</a:spDef>
+<a:lnDef>
+<a:spPr/><a:bodyPr/><a:lstStyle/>
+<a:style>
+<a:lnRef idx="1"><a:schemeClr val="accent1"/></a:lnRef>
+<a:fillRef idx="0"><a:schemeClr val="accent1"/></a:fillRef>
+<a:effectRef idx="0"><a:schemeClr val="accent1"/></a:effectRef>
+<a:fontRef idx="minor"><a:schemeClr val="tx1"/></a:fontRef>
+</a:style>
+</a:lnDef>
+</a:objectDefaults>
+<a:extraClrSchemeLst/>
+</a:theme>
