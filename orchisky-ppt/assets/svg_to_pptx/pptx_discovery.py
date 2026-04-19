@@ -1,15 +1,11 @@
 """Find SVG and notes files in a project directory."""
 
 from __future__ import annotations
-
 import re
 from pathlib import Path
 
 
-def find_svg_files(
-    project_path: Path,
-    source: str = 'output',
-) -> tuple[list[Path], str]:
+def find_svg_files(project_path: Path, source: str = 'output') -> tuple[list[Path], str]:
     dir_map = {'output': 'svg_output', 'final': 'svg_final'}
     dir_name = dir_map.get(source, source)
     svg_dir = project_path / dir_name
@@ -25,10 +21,7 @@ def find_svg_files(
     return sorted(svg_dir.glob('*.svg')), dir_name
 
 
-def find_notes_files(
-    project_path: Path,
-    svg_files: list[Path] | None = None,
-) -> dict[str, str]:
+def find_notes_files(project_path: Path, svg_files=None) -> dict[str, str]:
     notes_dir = project_path / 'notes'
     notes: dict[str, str] = {}
     if not notes_dir.exists():
