@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>PDA · 入库申请单扫码采集 · 兰之天 Orchisky WMS</title>
+<meta name="viewport" content="width=480,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue-50:#EAF2FE;--blue-100:#D0E1FC;--blue-200:#A8C8F9;--blue-300:#6FA3F5;
+  --blue-400:#3A85F3;--blue-500:#1070F0;--blue-600:#0A5AC8;--blue-700:#074499;
+  --blue-800:#052E6E;--blue-900:#041D48;
+  --ink-0:#FFFFFF;--ink-50:#FAFAFA;--ink-100:#F5F5F5;--ink-200:#E2E2E2;
+  --ink-300:#CCCCCC;--ink-400:#BBBBBB;--ink-500:#888888;--ink-600:#555555;
+  --ink-700:#333333;--ink-800:#1A1A1A;
+  --success-50:#EAF5EF;--success-600:#1A7A42;
+  --warning-50:#FEF4E8;--warning-600:#9A5200;
+  --danger-50:#FDEDED;--danger-600:#B01C1C;
+  --ff-sans:"Noto Sans SC","Source Han Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --ff-mono:"Roboto Mono","JetBrains Mono","Courier New",monospace;
+  --fs-pda-micro:12px;--fs-pda-small:12px;--fs-pda-body:14px;
+  --fs-pda-title:16px;--fs-pda-page:18px;--fs-pda-kpi:24px;
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:24px;
+  --radius-sm:2px;--radius-md:4px;--radius-lg:6px;
+  --h-statusbar:24px;--h-topbar:56px;--h-bottombar:48px;
+  --h-btn:48px;--h-btn-sm:38px;--h-field:40px;--h-row:44px;
+  --shadow-overlay:0 2px 12px rgba(7,68,153,0.12);
+  --scrim:rgba(4,29,72,0.48);
+  --focus-ring:0 0 0 2px var(--blue-300);
+  --selected-bg:var(--blue-50);--selected-edge:var(--blue-500);
+  --disabled-bg:var(--ink-200);--disabled-fg:var(--ink-400);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:var(--ff-sans);font-size:var(--fs-pda-body);color:var(--ink-700);background:#eceff3;padding:32px 24px;}
+.num,.mono{font-family:var(--ff-mono);letter-spacing:0.01em;}
+.scene-title{max-width:1200px;margin:0 auto 24px;font-size:14px;color:var(--ink-500);}
+.scene-title b{color:var(--ink-800);font-weight:700;margin-right:8px;}
+.stage{max-width:1200px;margin:0 auto;display:flex;gap:32px;flex-wrap:wrap;justify-content:center;}
+.frame{display:flex;flex-direction:column;align-items:center;gap:12px;}
+.frame-label{font-size:12px;color:var(--ink-500);}
+.pda{width:480px;height:800px;background:var(--ink-50);display:flex;flex-direction:column;border:1px solid var(--ink-300);border-radius:8px;overflow:hidden;}
+.pda-statusbar{height:var(--h-statusbar);padding:0 var(--sp-4);display:flex;justify-content:space-between;align-items:center;background:var(--ink-800);color:var(--ink-0);font-size:var(--fs-pda-micro);}
+.sb-icons{display:flex;gap:var(--sp-2);}
+.pda-topbar{height:var(--h-topbar);padding:0 var(--sp-4);display:flex;align-items:center;justify-content:space-between;background:var(--blue-500);color:var(--ink-0);}
+.tb-title{font-size:var(--fs-pda-page);font-weight:500;}
+.tb-back,.tb-action{width:40px;height:40px;background:transparent;border:0;color:var(--ink-0);font-size:20px;cursor:pointer;}
+.pda-body{flex:1;overflow:auto;background:var(--ink-50);}
+.bottom-cta{height:var(--h-bottombar);padding:0 var(--sp-4);display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);background:var(--ink-0);border-top:1px solid var(--ink-200);}
+.bottom-cta .btn{height:40px;}
+.btn{height:var(--h-btn);min-width:88px;padding:0 var(--sp-4);font-size:var(--fs-pda-body);font-weight:500;border-radius:var(--radius-md);border:1px solid transparent;background:transparent;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);}
+.btn-primary{background:var(--blue-500);color:var(--ink-0);}
+.btn-secondary{background:var(--ink-0);border-color:var(--ink-300);color:var(--ink-700);}
+.btn-ghost{background:transparent;color:var(--ink-600);}
+.btn-sm{height:var(--h-btn-sm);min-width:64px;font-size:var(--fs-pda-small);}
+.hdr-card{margin:var(--sp-4);padding:var(--sp-3) var(--sp-4);background:var(--ink-0);border:1px solid var(--ink-200);border-radius:var(--radius-md);}
+.hdr-line1{display:flex;justify-content:space-between;align-items:center;}
+.hdr-sn{font-size:var(--fs-pda-title);color:var(--ink-800);font-weight:500;}
+.hdr-line2{margin-top:var(--sp-2);font-size:var(--fs-pda-small);color:var(--ink-500);display:flex;justify-content:space-between;}
+.hdr-line3{margin-top:var(--sp-2);font-size:var(--fs-pda-small);color:var(--ink-500);}
+.chip{display:inline-flex;align-items:center;gap:var(--sp-1);padding:2px var(--sp-2);border-radius:var(--radius-sm);font-size:var(--fs-pda-small);line-height:1.4;border:1px solid transparent;}
+.chip-info{background:var(--blue-50);color:var(--blue-600);}
+.chip-success{background:var(--success-50);color:var(--success-600);}
+.chip-warning{background:var(--warning-50);color:var(--warning-600);}
+.chip-danger{background:var(--danger-50);color:var(--danger-600);}
+.scan-frame{position:relative;width:64%;aspect-ratio:1/1;margin:var(--sp-3) auto;background:var(--ink-800);}
+.sf-corner{position:absolute;width:24px;height:24px;border-color:var(--blue-500);border-style:solid;border-width:0;}
+.sf-corner.tl{top:0;left:0;border-top-width:3px;border-left-width:3px;}
+.sf-corner.tr{top:0;right:0;border-top-width:3px;border-right-width:3px;}
+.sf-corner.bl{bottom:0;left:0;border-bottom-width:3px;border-left-width:3px;}
+.sf-corner.br{bottom:0;right:0;border-bottom-width:3px;border-right-width:3px;}
+.sf-laser{position:absolute;top:50%;left:10%;right:10%;height:2px;background:var(--blue-500);opacity:0.9;}
+.sf-hint{position:absolute;bottom:var(--sp-3);left:0;right:0;text-align:center;color:var(--ink-0);font-size:var(--fs-pda-small);}
+.scan-status{margin:var(--sp-2) var(--sp-4) 0;padding:var(--sp-3);background:var(--success-50);border:1px solid var(--success-600);border-radius:var(--radius-md);display:flex;justify-content:space-between;align-items:center;color:var(--success-600);font-size:var(--fs-pda-small);}
+.section-title{margin:var(--sp-4) var(--sp-4) var(--sp-2);font-size:var(--fs-pda-small);color:var(--ink-500);}
+.list{list-style:none;margin:0 var(--sp-4);padding:0;background:var(--ink-0);border:1px solid var(--ink-200);border-radius:var(--radius-md);overflow:hidden;}
+.list-item{min-height:var(--h-row);padding:var(--sp-3) var(--sp-4);display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);border-bottom:1px solid var(--ink-200);}
+.list-item:last-child{border-bottom:0;}
+.li-title{font-size:var(--fs-pda-body);color:var(--ink-800);}
+.li-sub{font-size:var(--fs-pda-small);color:var(--ink-500);margin-top:2px;}
+.li-meta{display:flex;flex-direction:column;align-items:flex-end;gap:2px;}
+.li-qty{font-size:var(--fs-pda-title);color:var(--ink-800);font-weight:500;}
+.li-unit{font-size:var(--fs-pda-small);color:var(--ink-500);}
+.progress-bar{margin:var(--sp-4);padding:var(--sp-3);background:var(--ink-0);border:1px solid var(--ink-200);border-radius:var(--radius-md);}
+.pb-text{display:flex;justify-content:space-between;font-size:var(--fs-pda-small);color:var(--ink-600);}
+.pb-track{margin-top:var(--sp-2);height:6px;background:var(--ink-200);border-radius:var(--radius-sm);overflow:hidden;}
+.pb-fill{height:100%;background:var(--blue-500);}
+.field{margin:0 var(--sp-4) var(--sp-3);display:flex;flex-direction:column;gap:var(--sp-1);}
+.field-label{font-size:var(--fs-pda-small);color:var(--ink-600);}
+.req{color:var(--danger-600);font-style:normal;margin-left:2px;}
+.field-input{height:var(--h-field);padding:0 var(--sp-3);font-size:var(--fs-pda-body);color:var(--ink-800);background:var(--ink-0);border:1px solid var(--ink-300);border-radius:var(--radius-md);outline:none;font-family:inherit;}
+.field-input.num{font-family:var(--ff-mono);}
+.field-input.focused{border-color:var(--blue-500);box-shadow:var(--focus-ring);}
+.field-input.readonly{background:var(--ink-100);color:var(--ink-700);}
+.field-help{font-size:var(--fs-pda-small);color:var(--ink-500);}
+.input-stepper{display:flex;align-items:center;gap:var(--sp-2);}
+.stepper-btn{width:40px;height:40px;border:1px solid var(--ink-300);background:var(--ink-0);font-size:18px;color:var(--ink-700);border-radius:var(--radius-md);cursor:pointer;}
+.input-stepper .field-input{flex:1;text-align:center;font-size:var(--fs-pda-title);font-weight:500;}
+.result-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:var(--sp-5);gap:var(--sp-3);}
+.result-ring{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--success-50);color:var(--success-600);font-size:48px;line-height:1;}
+.result-title{font-size:var(--fs-pda-page);color:var(--ink-800);font-weight:700;margin-top:var(--sp-3);}
+.result-sub{font-size:var(--fs-pda-body);color:var(--ink-500);}
+.result-meta{margin-top:var(--sp-3);padding:var(--sp-3) var(--sp-4);background:var(--ink-0);border:1px solid var(--ink-200);border-radius:var(--radius-md);width:100%;text-align:left;}
+.rm-row{display:flex;justify-content:space-between;padding:var(--sp-1) 0;font-size:var(--fs-pda-small);}
+.rm-key{color:var(--ink-500);}
+.rm-val{color:var(--ink-800);font-family:var(--ff-mono);}
+.spec-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;background:var(--blue-50);color:var(--blue-600);border-radius:var(--radius-sm);font-size:11px;}
+</style>
+</head>
+<body>
+
+<div class="scene-title">
+  <b>场景</b>仓管员王建国使用 PDA 扫入库申请单 PO2026-04-0123 · 华瑞机电供货 · 应到 560 pcs ·
+  <b>对齐规范</b>Orchisky Design V2.0 + Field V1.0
+</div>
+
+<div class="stage">
+
+  <!-- 屏 1：扫码采集 -->
+  <div class="frame">
+    <div class="pda">
+      <div class="pda-statusbar">
+        <span class="num">09:42</span>
+        <span class="sb-icons"><span>5G</span><span>Wi-Fi</span><span class="num">87%</span></span>
+      </div>
+      <header class="pda-topbar">
+        <button class="tb-back">←</button>
+        <h1 class="tb-title">入库扫码采集</h1>
+        <button class="tb-action">⋮</button>
+      </header>
+      <div class="pda-body">
+        <div class="hdr-card">
+          <div class="hdr-line1">
+            <span class="hdr-sn num">PO2026-04-0123</span>
+            <span class="chip chip-info">进行中</span>
+          </div>
+          <div class="hdr-line2"><span>华瑞机电</span><span class="num">应到 560 pcs</span></div>
+          <div class="hdr-line3">收货仓 1#原料库 · 应到 <span class="num">2026-04-19</span></div>
+        </div>
+        <div class="scan-frame">
+          <span class="sf-corner tl"></span><span class="sf-corner tr"></span>
+          <span class="sf-corner bl"></span><span class="sf-corner br"></span>
+          <span class="sf-laser"></span>
+          <span class="sf-hint">请将条码对准取景框</span>
+        </div>
+        <div class="scan-status">
+          <span>✓ BRG-6205 轴承 6205-2RS</span>
+          <span class="num">01:02 前</span>
+        </div>
+        <div class="section-title">已采集（<span class="num">4</span> / <span class="num">5</span>）</div>
+        <ul class="list">
+          <li class="list-item">
+            <div><div class="li-title">BRG-6205 · 轴承 6205-2RS</div><div class="li-sub num">LOT-20260418-01</div></div>
+            <div class="li-meta"><span class="li-qty num">200</span><span class="li-unit">pcs</span></div>
+          </li>
+          <li class="list-item">
+            <div><div class="li-title">M-BRG-A2024-02 · 深沟球轴承</div><div class="li-sub num">LOT-20260418-02</div></div>
+            <div class="li-meta"><span class="li-qty num">120</span><span class="li-unit">pcs</span></div>
+          </li>
+          <li class="list-item">
+            <div><div class="li-title">R-1024-05-B · O 型密封圈</div><div class="li-sub num">LOT-20260418-03</div></div>
+            <div class="li-meta"><span class="li-qty num">80</span><span class="li-unit">pcs</span></div>
+          </li>
+          <li class="list-item">
+            <div><div class="li-title">电机-50W-A · 绕线电机</div><div class="li-sub num">LOT-20260418-04</div></div>
+            <div class="li-meta"><span class="li-qty num">60</span><span class="li-unit">pcs</span></div>
+          </li>
+        </ul>
+        <div class="progress-bar">
+          <div class="pb-text"><span>采集进度</span><span><span class="num">460</span> / <span class="num">560</span> pcs</span></div>
+          <div class="pb-track"><div class="pb-fill" style="width:82%;"></div></div>
+        </div>
+      </div>
+      <footer class="bottom-cta">
+        <button class="btn btn-ghost">暂存草稿</button>
+        <div style="display:flex;gap:var(--sp-2);">
+          <button class="btn btn-secondary btn-sm">手动录入</button>
+          <button class="btn btn-primary btn-sm">完成入库</button>
+        </div>
+      </footer>
+    </div>
+    <div class="frame-label">屏 1 · 扫码采集</div>
+  </div>
+
+  <!-- 屏 2：手动录入 -->
+  <div class="frame">
+    <div class="pda">
+      <div class="pda-statusbar">
+        <span class="num">09:44</span>
+        <span class="sb-icons"><span>5G</span><span>Wi-Fi</span><span class="num">87%</span></span>
+      </div>
+      <header class="pda-topbar">
+        <button class="tb-back">←</button>
+        <h1 class="tb-title">手动录入明细</h1>
+        <button class="tb-action">⋮</button>
+      </header>
+      <div class="pda-body">
+        <div style="margin:var(--sp-4);padding:var(--sp-3);background:var(--warning-50);border:1px solid var(--warning-600);border-radius:var(--radius-md);color:var(--warning-600);font-size:var(--fs-pda-small);">
+          条码缺失或模糊时使用手动录入。所有录入将留痕供复核。
+        </div>
+        <div class="field">
+          <label class="field-label">物料编码 <em class="req">*</em></label>
+          <input class="field-input num" value="M-BRG-A2024-03" />
+          <span class="field-help">匹配：深沟球轴承 6205-ZZ</span>
+        </div>
+        <div class="field">
+          <label class="field-label">批号 <em class="req">*</em></label>
+          <input class="field-input num" value="LOT-20260418-05" />
+        </div>
+        <div class="field">
+          <label class="field-label">数量 <em class="req">*</em></label>
+          <div class="input-stepper">
+            <button class="stepper-btn">−</button>
+            <input class="field-input num focused" value="100" />
+            <button class="stepper-btn">+</button>
+          </div>
+          <span class="field-help">单位 pcs · 余 100 pcs 待采</span>
+        </div>
+        <div class="field">
+          <label class="field-label">生产日期</label>
+          <input class="field-input readonly num" value="2026-04-10" readonly />
+        </div>
+        <div class="field">
+          <label class="field-label">异常原因</label>
+          <input class="field-input" value="条码磨损" />
+          <span class="field-help">选填</span>
+        </div>
+      </div>
+      <footer class="bottom-cta">
+        <button class="btn btn-ghost">取消</button>
+        <div style="display:flex;gap:var(--sp-2);">
+          <button class="btn btn-secondary btn-sm">继续扫码</button>
+          <button class="btn btn-primary btn-sm">保存明细</button>
+        </div>
+      </footer>
+    </div>
+    <div class="frame-label">屏 2 · 手动录入</div>
+  </div>
+
+  <!-- 屏 3：提交结果 -->
+  <div class="frame">
+    <div class="pda">
+      <div class="pda-statusbar">
+        <span class="num">09:47</span>
+        <span class="sb-icons"><span>5G</span><span>Wi-Fi</span><span class="num">86%</span></span>
+      </div>
+      <header class="pda-topbar">
+        <button class="tb-back">←</button>
+        <h1 class="tb-title">提交结果</h1>
+        <button class="tb-action">⋮</button>
+      </header>
+      <div class="pda-body">
+        <div class="result-wrap">
+          <div class="result-ring">✓</div>
+          <div class="result-title">入库提交成功</div>
+          <div class="result-sub">已同步至 WMS 主机</div>
+          <div class="result-meta">
+            <div class="rm-row"><span class="rm-key">入库单号</span><span class="rm-val">RK-20260420-0038</span></div>
+            <div class="rm-row"><span class="rm-key">应到 / 实到</span><span class="rm-val">560 / 560 pcs</span></div>
+            <div class="rm-row"><span class="rm-key">差异数量</span><span class="rm-val">0 pcs</span></div>
+            <div class="rm-row"><span class="rm-key">操作人</span><span class="rm-val">王建国</span></div>
+            <div class="rm-row"><span class="rm-key">时间</span><span class="rm-val">2026-04-20 09:47:12</span></div>
+          </div>
+          <span class="spec-badge" style="margin-top:var(--sp-3);">✓ Orchisky V2.0 / Field V1.0</span>
+        </div>
+      </div>
+      <footer class="bottom-cta">
+        <button class="btn btn-ghost">返回主菜单</button>
+        <div style="display:flex;gap:var(--sp-2);">
+          <button class="btn btn-secondary btn-sm">打印回单</button>
+          <button class="btn btn-primary btn-sm">继续下一单</button>
+        </div>
+      </footer>
+    </div>
+    <div class="frame-label">屏 3 · 提交结果</div>
+  </div>
+
+</div>
+</body>
+</html>
