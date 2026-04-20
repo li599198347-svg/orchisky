@@ -72,7 +72,7 @@ assets/
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Orchisky PPT V5.0 · 已启动
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-我会带你完成8个阶段，把你的材料和想法
+我会带你完成 8 个阶段，把你的材料和想法
 转化为一份能驱动受众决策的专业演示文稿。
 
 每个阶段开始时我会告诉你：
@@ -95,36 +95,24 @@ Phase 必须按 1→2→3→4→5→6→7→8 顺序执行。
 
 **用户要求跳过某个Phase时：**
 不得直接跳过。先读取对应Phase文件的"跳过风险"说明，向用户明确告知风险，
-让用户二次确认：「了解风险后，你确认要跳过 Phase X 吗？」
-用户明确确认后，记录跳过原因，继续执行下一Phase。
-跳过记录写入工作区，Phase 8 质检时会再次提示。
+让用户二次确认。用户明确确认后，记录跳过原因，继续执行下一Phase。
 
 ### 规则 2：入场条件检查
 
-每个Phase开始前检查前置条件（见各Phase文件的"入场条件"部分）。
-不满足时拒绝进入并说明原因，引导用户完成前置步骤。
+每个Phase开始前检查前置条件。不满足时拒绝进入并说明原因。
 
 ### 规则 3：阶段提示卡（强制）
 
 每个Phase开始时，必须先输出该Phase的提示卡，再执行内容。
-提示卡统一使用 `┌──` 方框样式，包含以下四项：
-- 这一步要做什么
-- 用什么方法（首次出现的专业术语在括号内附中文说明）
-- 你需要做的
-- 注意事项（有重要风险时才显示）
+提示卡统一使用 `┌──` 方框样式。
 
-### 规则 4：教练机制检查（每Phase入口执行）
+### 规则 4：教练机制检查（每 Phase 入口执行）
 
-每个Phase开始时，读取 `references/coach-engine.md` 的入口检查规则：
-- 检测当前Phase是否需要激活教练模式
-- 根据当前能力档位调整交互方式
-- 档位可随时降级（发现用户在当前Phase表现不如预期时自动降级）
+每个Phase开始时，读取 `references/coach-engine.md` 的入口检查规则。
 
 ### 规则 5：完成卡放行（强制）
 
-每个Phase执行完毕后输出完成卡。
-AI 根据用户回应的语义判断是否放行，无需固定触发词。
-用户未明确确认时，不得自动进入下一Phase。
+每个Phase执行完毕后输出完成卡。用户未明确确认时，不得自动进入下一Phase。
 
 **完成卡统一格式：**
 ```
@@ -156,43 +144,21 @@ AI 根据用户回应的语义判断是否放行，无需固定触发词。
 | 7 | 逐页SVG设计 | 全部SVG文件 | 每3页确认 + 整体预览 |
 | 8 | 质检与交付 | 交付物包 + QC报告 | 最终质检结果确认 |
 
-每个Phase的完整执行规则见对应的 `references/phase-0X.md` 文件。
-
 ---
 
 ## 品牌规范自动同步
 
 品牌规范的唯一来源是 `/mnt/skills/user/orchisky-design/references/orchisky.md`。
-修改规范文件后，下次运行技能自动生效，无需修改本技能任何文件。
-
 本文件及所有Phase文件中禁止出现具体色值，只能引用规范条款编号。
-技能是规范的执行者，不是共同作者。
 
 ---
 
 ## 工具链概要
 
-### SVG → PPTX 转换
-
-唯一调用方式（通过wrapper，不直接调底层）：
+唯一调用方式：
 ```python
 from svg_to_pptx_wrapper import svg_to_native_pptx
 success = svg_to_native_pptx(svg_files=svg_files, output_path=output, canvas_format='ppt169')
 ```
 
-**中文字体处理：**
-- 工具链内置字体映射表，`Songti SC` 自动映射 `SimSun`（Windows），`PingFang SC` 自动映射 `Microsoft YaHei`
-- SVG中字体声明必须包含fallback链：`"Songti SC,SimSun,serif"` 或 `"Microsoft YaHei,sans-serif"`
-- 详见 `pptx-native-rules.md` §字体显示异常
-
-**批量生成错误处理：**
-- 单页解析失败 → 该页输出空白页，不中断整批转换，控制台打印 `Error: Failed to parse SVG [filename]`
-- XML特殊字符（`&`）自动修复，`<`、`>`、`"` 需手动转义
-- 转换后检查：`verbose=True` 输出每页转换状态，ERROR数量 > 0 时建议回到 Phase 7 修复后重转
-- 完整排查指南见 `pptx-native-rules.md` §常见问题排查
-
-**质量审计三级Gate（自动在转换前执行）：**
-- Gate 1：空内容检测 → WARNING
-- Gate 2：单行字数超限 → WARNING
-- Gate 3：XML合法性修复 + rgb()颜色警告 → 自动修复/WARNING
-- 详见 `quality-audit-protocol.md`
+详见 `pptx-native-rules.md` 和 `quality-audit-protocol.md`。
