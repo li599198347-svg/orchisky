@@ -1,13 +1,46 @@
-# License Note
+# SVG to PPTX 工具链 · 来源声明
 
-This svg_to_pptx module is part of the Orchisky PPT toolkit.
-Developed for internal use by 兰之天 Orchisky team.
+## 基本信息
 
-## Dependencies
+- **项目名**：svg_to_pptx
+- **来源**：[GitHub hugohe3/ppt-master](https://github.com/hugohe3/ppt-master)
+- **License**：MIT License
+- **快照日期**：2026-04-17
+- **原始路径**：`ppt-master/skills/ppt-master/scripts/svg_to_pptx/`
 
-- python-pptx: MIT License
-- lxml: BSD License
+## 引入这套代码的原因
 
-## Usage
+在 ppt-svg 技能 V4.0 升级过程中，我们验证了 `ppt-master` 项目的 `svg_to_pptx` 模块：
+- 在邒普长兴项目癶55 张 SVG 上测试，100% 成功(0 失败 0 跳过)
+- 生成的 PPT 每个元素都是原生 DrawingML 形状，文字可直接双击编辑
+- 体积小(55 页 209 KB，纯矢量)
+- 视觉效果与 SVG 源 100% 对齐
 
-Call only through `svg_to_pptx_wrapper.py`. Do not import directly.
+## 核心感谢
+
+特别感谢 **Hugo He** 和 ppt-master 开源社区的工作。其技术方案的关键创新：
+1. 精确的 baseline 偏移参数(0.85)
+2. 字符级精确的文字宽度估算(CJK/英文/空格分类)
+3. 东亚+拉丁字体双字段设置
+4. `wrap="none"` + `<a:spAutoFit/>` + `lIns/tIns/rIns/bIns="0"` 的关键 XML 配置
+
+## MIT License
+
+MIT License
+
+Copyright (c) hugohe3/ppt-master contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+provided, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
