@@ -1,54 +1,74 @@
 """ConvertContext — shared state passed through the SVG → DrawingML pipeline."""
+
 from __future__ import annotations
+
+from pathlib import Path
+from xml.etree import ElementTree as ET
 from dataclasses import dataclass, field
-from typing import Optional
-from lxml import etree
+
+
+@dataclass
+class ShapeResult:
+    """Internal conversion result carrying XML plus resolved EMU bounds."""
+
+    xml: str
+    bounds_emu: tuple[int, int, int, int] | None = None
 
 
 @dataclass
 class ConvertContext:
-    """Mutable conversion state shared across all converter functions."""
+    """Shared context passed through the SVG → DrawingML conversion pipeline."""
 
-    # Slide geometry (EMU)
-    slide_width_emu: int = 9144000   # 16:9 default
-    slide_height_emu: int = 5143500
+    defs: dict[str, ET.Element] = field(default_factory=dict)
+    id_counter: int = 2
+    slide_num: int = 1
+    translate_x: float = 0.0
+    translate_y: float = 0.0
+    scale_x: float = 1.0
+    scale_y: float = 1.0
+    filter_id: str | None = None
+    media_files: dict[str, bytes] = field(default_factory=dict)
+    rel_entries: list[dict[str, str]] = field(default_factory=list)
+    rel_id_counter: int = 2
+    svg_dir: Path | None = None
+    inherited_styles: dict[str, str] = field(default_factory=dict)
 
-    # SVG viewport
-    svg_width: float = 1280.0
-    svg_height: float = 720.0
+    def next_id(self) -> int:
+        cid = self.id_counter
+        self.id_counter += 1
+        return cid
 
-    # Scale factors (EMU per SVG user unit)
-    scale_x: float = field(init=False)
-    scale_y: float = field(init=False)
+    def next_rel_id(self) -> str:
+        rid = f'rId{self.rel_id_counter}'
+        self.rel_id_counter += 1
+        return rid
 
-    # Accumulated warnings
-    warnings: list = field(default_factory=list)
+    def child(self, dx: float = 0, dy: float = 0, sx: float = 1.0, sy: float = 1.0,
+              filter_id: str | None = None, style_overrides: dict[str, str] | None = None) -> 'ConvertContext':
+        merged = dict(self.inherited_styles)
+        if style_overrides:
+            _OPACITY_KEYS = ('opacity', 'fill-opacity', 'stroke-opacity')
+            for op_key in _OPACITY_KEYS:
+                if op_key in style_overrides and op_key in merged:
+                    try:
+                        merged[op_key] = str(float(merged[op_key]) * float(style_overrides[op_key]))
+                    except ValueError:
+                        merged[op_key] = style_overrides[op_key]
+                elif op_key in style_overrides:
+                    merged[op_key] = style_overrides[op_key]
+            for k, v in style_overrides.items():
+                if k not in _OPACITY_KEYS:
+                    merged[k] = v
+        return ConvertContext(
+            defs=self.defs, id_counter=self.id_counter, slide_num=self.slide_num,
+            translate_x=self.translate_x + dx, translate_y=self.translate_y + dy,
+            scale_x=self.scale_x * sx, scale_y=self.scale_y * sy,
+            filter_id=filter_id or self.filter_id,
+            media_files=self.media_files, rel_entries=self.rel_entries,
+            rel_id_counter=self.rel_id_counter, svg_dir=self.svg_dir,
+            inherited_styles=merged,
+        )
 
-    # Current transform stack
-    transform_stack: list = field(default_factory=list)
-
-    # Defs registry (id -> element)
-    defs: dict = field(default_factory=dict)
-
-    # Media assets (embedded images base64)
-    media: dict = field(default_factory=dict)
-
-    # verbose logging
-    verbose: bool = False
-
-    def __post_init__(self):
-        self.scale_x = self.slide_width_emu / self.svg_width
-        self.scale_y = self.slide_height_emu / self.svg_height
-
-    def recalc_scale(self):
-        self.scale_x = self.slide_width_emu / self.svg_width
-        self.scale_y = self.slide_height_emu / self.svg_height
-
-    def warn(self, msg: str):
-        self.warnings.append(msg)
-        if self.verbose:
-            print(f"  [WARN] {msg}")
-
-    def log(self, msg: str):
-        if self.verbose:
-            print(f"  {msg}")
+    def sync_from_child(self, child_ctx: 'ConvertContext') -> None:
+        self.id_counter = child_ctx.id_counter
+        self.rel_id_counter = child_ctx.rel_id_counter

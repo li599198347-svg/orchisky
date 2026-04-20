@@ -1,49 +1,94 @@
 """Slide dimensions, format detection, EMU conversion, and constants."""
 
 from __future__ import annotations
-from dataclasses import dataclass
 
-# EMU per inch
+import re
+import sys
+from pathlib import Path
+from xml.etree import ElementTree as ET
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+try:
+    from project_utils import get_project_info
+    from config import CANVAS_FORMATS
+except ImportError:
+    CANVAS_FORMATS = {
+        'ppt169': {'name': 'PPT 16:9', 'dimensions': '1280×720', 'viewbox': '0 0 1280 720'},
+    }
+    def get_project_info(path: str) -> dict:
+        return {'format': 'unknown', 'name': Path(path).name}
+
 EMU_PER_INCH = 914400
-# EMU per point
-EMU_PER_PT = 12700
+EMU_PER_PIXEL = EMU_PER_INCH / 96
 
-# Standard SVG canvas size assumed by the Orchisky skill
-SVG_CANVAS_W = 1280
-SVG_CANVAS_H = 720
-
-
-@dataclass(frozen=True)
-class SlideFormat:
-    """Slide width/height in EMU."""
-    width: int
-    height: int
-    name: str
-
-
-# Built-in formats
-FORMATS: dict[str, SlideFormat] = {
-    'ppt169': SlideFormat(9144000, 5143500, '16:9 Standard'),
-    'ppt43':  SlideFormat(6858000, 5143500, '4:3 Standard'),
-    'pptwide': SlideFormat(12192000, 6858000, '16:9 Widescreen'),
+NAMESPACES = {
+    'a': 'http://schemas.openxmlformats.org/drawingml/2006/main',
+    'r': 'http://schemas.openxmlformats.org/officeDocument/2006/relationships',
+    'p': 'http://schemas.openxmlformats.org/presentationml/2006/main',
+    'asvg': 'http://schemas.microsoft.com/office/drawing/2016/SVG/main',
 }
 
-
-def get_format(name: str) -> SlideFormat:
-    """Return a SlideFormat by name, falling back to ppt169."""
-    return FORMATS.get(name, FORMATS['ppt169'])
+for prefix, uri in NAMESPACES.items():
+    ET.register_namespace(prefix, uri)
 
 
-def px_to_emu(px: float, scale: float) -> int:
-    """Convert SVG pixels to EMU using a scale factor."""
-    return int(round(px * scale))
+def get_slide_dimensions(canvas_format: str, custom_pixels: tuple[int, int] | None = None) -> tuple[int, int]:
+    if custom_pixels:
+        width_px, height_px = custom_pixels
+    else:
+        if canvas_format not in CANVAS_FORMATS:
+            canvas_format = 'ppt169'
+        dimensions = CANVAS_FORMATS[canvas_format]['dimensions']
+        match = re.match(r'(\d+)[×x](\d+)', dimensions)
+        if match:
+            width_px = int(match.group(1))
+            height_px = int(match.group(2))
+        else:
+            width_px, height_px = 1280, 720
+    return int(width_px * EMU_PER_PIXEL), int(height_px * EMU_PER_PIXEL)
 
 
-def pt_to_emu(pt: float) -> int:
-    """Convert points to EMU."""
-    return int(round(pt * EMU_PER_PT))
+def get_pixel_dimensions(canvas_format: str, custom_pixels: tuple[int, int] | None = None) -> tuple[int, int]:
+    if custom_pixels:
+        return custom_pixels
+    if canvas_format not in CANVAS_FORMATS:
+        canvas_format = 'ppt169'
+    dimensions = CANVAS_FORMATS[canvas_format]['dimensions']
+    match = re.match(r'(\d+)[×x](\d+)', dimensions)
+    if match:
+        return int(match.group(1)), int(match.group(2))
+    return 1280, 720
 
 
-def emu_to_px(emu: int, scale: float) -> float:
-    """Convert EMU back to SVG pixels."""
-    return emu / scale if scale else 0.0
+def get_viewbox_dimensions(svg_path: Path) -> tuple[int, int] | None:
+    try:
+        with open(svg_path, 'r', encoding='utf-8') as f:
+            content = f.read(2000)
+        match = re.search(r'viewBox="([^"]+)"', content)
+        if not match:
+            return None
+        parts = re.split(r'[\s,]+', match.group(1).strip())
+        if len(parts) < 4:
+            return None
+        width = float(parts[2])
+        height = float(parts[3])
+        if width <= 0 or height <= 0:
+            return None
+        return int(round(width)), int(round(height))
+    except Exception:
+        return None
+
+
+def detect_format_from_svg(svg_path: Path) -> str | None:
+    try:
+        with open(svg_path, 'r', encoding='utf-8') as f:
+            content = f.read(2000)
+        match = re.search(r'viewBox="([^"]+)"', content)
+        if match:
+            viewbox = match.group(1)
+            for fmt_key, fmt_info in CANVAS_FORMATS.items():
+                if fmt_info['viewbox'] == viewbox:
+                    return fmt_key
+    except Exception:
+        pass
+    return None
