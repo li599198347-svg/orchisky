@@ -2,113 +2,109 @@
 
 from __future__ import annotations
 
-import argparse
 import sys
+import argparse
+from datetime import datetime
 from pathlib import Path
 
+from .pptx_dimensions import CANVAS_FORMATS, get_project_info
+from .pptx_discovery import find_svg_files, find_notes_files
+from .pptx_builder import create_pptx_with_native_svg
+from .pptx_slide_xml import TRANSITIONS
 
-def main(argv=None):
-    """
-    Convert SVG files to a native PPTX.
 
-    Usage:
-        python -m svg_to_pptx input_dir/ output.pptx [options]
-    """
+def main() -> None:
+    transition_choices = (
+        ['none'] + (list(TRANSITIONS.keys()) if TRANSITIONS
+                    else ['fade', 'push', 'wipe', 'split', 'strips', 'cover', 'random'])
+    )
+
     parser = argparse.ArgumentParser(
-        prog='svg_to_pptx',
-        description='Convert SVG slides to native editable PPTX (Orchisky V4.0)',
-    )
-    parser.add_argument(
-        'input',
-        help='Directory containing SVG files, or a glob pattern',
-    )
-    parser.add_argument(
-        'output',
-        help='Output .pptx path',
-    )
-    parser.add_argument(
-        '--format', '-f',
-        default='ppt169',
-        choices=['ppt169', 'ppt43', 'pptwide'],
-        help='Slide canvas format (default: ppt169)',
-    )
-    parser.add_argument(
-        '--notes-dir', '-n',
-        default=None,
-        help='Directory containing .md notes files (stem must match SVG stem)',
-    )
-    parser.add_argument(
-        '--compat', '-c',
-        action='store_true',
-        default=False,
-        help='Enable compatibility mode (embed PNG fallback)',
-    )
-    parser.add_argument(
-        '--verbose', '-v',
-        action='store_true',
-        default=False,
-        help='Verbose output',
-    )
-    parser.add_argument(
-        '--pattern', '-p',
-        default='*.svg',
-        help='Glob pattern for SVG files (default: *.svg)',
+        description='PPT Master - SVG to PPTX Tool',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-    args = parser.parse_args(argv)
+    parser.add_argument('project_path', type=str)
+    parser.add_argument('-o', '--output', type=str, default=None)
+    parser.add_argument('-s', '--source', type=str, default='output')
+    parser.add_argument('-f', '--format', type=str, choices=list(CANVAS_FORMATS.keys()), default=None)
+    parser.add_argument('-q', '--quiet', action='store_true')
+    parser.add_argument('--no-compat', action='store_true')
 
-    input_path = Path(args.input)
-    output_path = Path(args.output)
+    mode_group = parser.add_mutually_exclusive_group()
+    mode_group.add_argument('--only', type=str, choices=['native', 'legacy'], default=None)
+    mode_group.add_argument('--native', action='store_true', default=False)
 
-    # Discover SVG files
-    if input_path.is_dir():
-        from .pptx_discovery import discover_svg_files
-        svg_files = discover_svg_files(input_path, args.pattern)
-    elif '*' in str(input_path) or '?' in str(input_path):
-        import glob
-        svg_files = sorted(Path(p) for p in glob.glob(str(input_path)))
-    else:
-        svg_files = [input_path]
+    parser.add_argument('-t', '--transition', type=str, choices=transition_choices, default='fade')
+    parser.add_argument('--transition-duration', type=float, default=0.4)
+    parser.add_argument('--auto-advance', type=float, default=None)
+    parser.add_argument('--no-notes', action='store_true')
 
+    args = parser.parse_args()
+
+    project_path = Path(args.project_path)
+    if not project_path.exists():
+        print(f"Error: Path does not exist: {project_path}")
+        sys.exit(1)
+
+    try:
+        project_info = get_project_info(str(project_path))
+        project_name = project_info.get('name', project_path.name)
+        detected_format = project_info.get('format')
+    except Exception:
+        project_name = project_path.name
+        detected_format = None
+
+    canvas_format = args.format
+    if canvas_format is None and detected_format and detected_format != 'unknown':
+        canvas_format = detected_format
+
+    svg_files, source_dir_name = find_svg_files(project_path, args.source)
     if not svg_files:
-        print(f"[Error] No SVG files found in: {args.input}", file=sys.stderr)
-        return 1
+        print("Error: No SVG files found")
+        sys.exit(1)
 
-    if args.verbose:
-        print(f"Found {len(svg_files)} SVG file(s)")
+    only_mode = args.only
+    gen_native = only_mode in (None, 'native')
+    gen_legacy = only_mode in (None, 'legacy')
+    if args.native and only_mode is None:
+        gen_legacy = False
 
-    # Optional notes
-    notes = None
-    if args.notes_dir:
-        notes_path = Path(args.notes_dir)
-        from .pptx_discovery import discover_notes_files
-        notes_map = discover_notes_files(notes_path)
-        notes = {svg.stem: notes_map[svg.stem].read_text(encoding='utf-8')
-                 for svg in svg_files
-                 if svg.stem in notes_map}
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-    # Build PPTX
-    from .pptx_builder import create_pptx_with_native_svg
-    ok = create_pptx_with_native_svg(
-        svg_files=svg_files,
-        output_path=output_path,
-        canvas_format=args.format,
-        verbose=args.verbose,
-        transition=None,
-        use_compat_mode=args.compat,
-        enable_notes=bool(notes),
-        notes=notes,
-        use_native_shapes=True,
+    if args.output:
+        output_base = Path(args.output)
+        native_path = output_base
+        stem = output_base.stem
+        legacy_path = output_base.parent / f"{stem}_svg{output_base.suffix}"
+    else:
+        exports_dir = project_path / "exports"
+        exports_dir.mkdir(parents=True, exist_ok=True)
+        native_path = exports_dir / f"{project_name}_{timestamp}.pptx"
+        legacy_path = exports_dir / f"{project_name}_{timestamp}_svg.pptx"
+
+    native_path.parent.mkdir(parents=True, exist_ok=True)
+    verbose = not args.quiet
+    enable_notes = not args.no_notes
+    notes: dict[str, str] = {}
+    if enable_notes:
+        notes = find_notes_files(project_path, svg_files)
+
+    transition = args.transition if args.transition != 'none' else None
+
+    shared_kwargs = dict(
+        svg_files=svg_files, canvas_format=canvas_format, verbose=verbose,
+        transition=transition, transition_duration=args.transition_duration,
+        auto_advance=args.auto_advance, use_compat_mode=not args.no_compat,
+        notes=notes, enable_notes=enable_notes,
     )
 
-    if ok:
-        if args.verbose:
-            print(f"[OK] Output: {output_path}")
-        return 0
-    else:
-        print(f"[FAIL] Some slides failed to convert. Check warnings above.", file=sys.stderr)
-        return 1
+    success = True
+    if gen_native:
+        ok = create_pptx_with_native_svg(output_path=native_path, use_native_shapes=True, **shared_kwargs)
+        success = success and ok
+    if gen_legacy:
+        ok = create_pptx_with_native_svg(output_path=legacy_path, use_native_shapes=False, **shared_kwargs)
+        success = success and ok
 
-
-if __name__ == '__main__':
-    sys.exit(main())
+    sys.exit(0 if success else 1)
