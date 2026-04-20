@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>PDA 骨架 · 兰之天 Orchisky 现场端</title>
+<meta name="viewport" content="width=480,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue-50:#EAF2FE;--blue-100:#D0E1FC;--blue-200:#A8C8F9;--blue-300:#6FA3F5;
+  --blue-400:#3A85F3;--blue-500:#1070F0;--blue-600:#0A5AC8;--blue-700:#074499;
+  --blue-800:#052E6E;--blue-900:#041D48;
+  --ink-0:#FFFFFF;--ink-50:#FAFAFA;--ink-100:#F5F5F5;--ink-200:#E2E2E2;
+  --ink-300:#CCCCCC;--ink-400:#BBBBBB;--ink-500:#888888;--ink-600:#555555;
+  --ink-700:#333333;--ink-800:#1A1A1A;
+  --success-50:#EAF5EF;--success-600:#1A7A42;
+  --warning-50:#FEF4E8;--warning-600:#9A5200;
+  --danger-50:#FDEDED;--danger-600:#B01C1C;
+  --ff-sans:"Noto Sans SC","Source Han Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --ff-mono:"Roboto Mono","JetBrains Mono","Courier New",monospace;
+  --fs-pda-micro:12px;--fs-pda-small:12px;--fs-pda-body:14px;
+  --fs-pda-title:16px;--fs-pda-page:18px;--fs-pda-kpi:24px;
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:24px;
+  --radius-sm:2px;--radius-md:4px;--radius-lg:6px;
+  --h-statusbar:24px;--h-topbar:56px;--h-bottombar:48px;
+  --h-btn:48px;--h-btn-sm:38px;--h-field:40px;--h-row:44px;
+  --shadow-overlay:0 2px 12px rgba(7,68,153,0.12);
+  --scrim:rgba(4,29,72,0.48);
+  --focus-ring:0 0 0 2px var(--blue-300);
+  --selected-bg:var(--blue-50);--selected-edge:var(--blue-500);
+  --disabled-bg:var(--ink-200);--disabled-fg:var(--ink-400);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  font-family:var(--ff-sans);
+  font-size:var(--fs-pda-body);
+  color:var(--ink-700);
+  background:var(--ink-100);
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+}
+.num,.mono{font-family:var(--ff-mono);}
+
+/* === PDA 外框（480×800） === */
+.pda{
+  width:480px; height:800px;
+  background:var(--ink-50);
+  display:flex; flex-direction:column;
+  border:1px solid var(--ink-300);
+  border-radius:8px;
+  overflow:hidden;
+}
+
+/* === StatusBar 24 === */
+.pda-statusbar{
+  height:var(--h-statusbar);
+  padding:0 var(--sp-4);
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--ink-800);
+  color:var(--ink-0);
+  font-size:var(--fs-pda-micro);
+}
+.sb-icons{display:flex;gap:var(--sp-2);}
+
+/* === Topbar 56（蓝） === */
+.pda-topbar{
+  height:var(--h-topbar);
+  padding:0 var(--sp-4);
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--blue-500);
+  color:var(--ink-0);
+}
+.tb-title{font-size:var(--fs-pda-page);font-weight:500;}
+.tb-back,.tb-action{
+  width:40px;height:40px;background:transparent;border:0;color:var(--ink-0);
+  font-size:20px;line-height:40px;text-align:center;cursor:pointer;
+}
+
+/* === 内容区 === */
+.pda-body{
+  flex:1;
+  overflow:auto;
+  padding:var(--sp-4);
+  background:var(--ink-50);
+}
+
+/* === 底 CTA 48 === */
+.bottom-cta{
+  height:var(--h-bottombar);
+  padding:0 var(--sp-4);
+  display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);
+  background:var(--ink-0);
+  border-top:1px solid var(--ink-200);
+}
+.bottom-cta .btn{height:40px;}
+
+/* === 按钮 === */
+.btn{
+  height:var(--h-btn);
+  min-width:88px;
+  padding:0 var(--sp-4);
+  font-size:var(--fs-pda-body);
+  font-weight:500;
+  border-radius:var(--radius-md);
+  border:1px solid transparent;
+  background:transparent;
+  cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);
+  font-family:inherit;
+}
+.btn-primary{background:var(--blue-500);color:var(--ink-0);}
+.btn-primary:hover{background:var(--blue-600);}
+.btn-secondary{background:var(--ink-0);border-color:var(--ink-300);color:var(--ink-700);}
+.btn-ghost{background:transparent;color:var(--ink-600);}
+
+.placeholder{
+  padding:var(--sp-4);
+  border:1px dashed var(--ink-300);
+  border-radius:var(--radius-md);
+  color:var(--ink-500);
+  text-align:center;
+  font-size:var(--fs-pda-small);
+}
+</style>
+</head>
+<body>
+
+<div class="pda" role="application" aria-label="PDA 骨架">
+
+  <!-- StatusBar -->
+  <div class="pda-statusbar">
+    <span class="num">09:42</span>
+    <span class="sb-icons">
+      <span>5G</span><span>Wi-Fi</span><span class="num">87%</span>
+    </span>
+  </div>
+
+  <!-- Topbar -->
+  <header class="pda-topbar">
+    <button class="tb-back" aria-label="返回">←</button>
+    <h1 class="tb-title">页面标题</h1>
+    <button class="tb-action" aria-label="菜单">⋮</button>
+  </header>
+
+  <!-- Body -->
+  <main class="pda-body">
+    <div class="placeholder">
+      这里放业务内容<br>
+      （列表 / 表单 / 扫码区等）
+    </div>
+  </main>
+
+  <!-- Bottom CTA -->
+  <footer class="bottom-cta">
+    <button class="btn btn-ghost">取消</button>
+    <div style="display:flex;gap:var(--sp-2);">
+      <button class="btn btn-secondary">暂存</button>
+      <button class="btn btn-primary">提交</button>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

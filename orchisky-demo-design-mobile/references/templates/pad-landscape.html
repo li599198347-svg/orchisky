@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Pad 横屏骨架 · 兰之天 Orchisky 现场端</title>
+<meta name="viewport" content="width=1280,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue-50:#EAF2FE;--blue-100:#D0E1FC;--blue-200:#A8C8F9;--blue-300:#6FA3F5;
+  --blue-400:#3A85F3;--blue-500:#1070F0;--blue-600:#0A5AC8;--blue-700:#074499;
+  --blue-800:#052E6E;--blue-900:#041D48;
+  --ink-0:#FFFFFF;--ink-50:#FAFAFA;--ink-100:#F5F5F5;--ink-200:#E2E2E2;
+  --ink-300:#CCCCCC;--ink-400:#BBBBBB;--ink-500:#888888;--ink-600:#555555;
+  --ink-700:#333333;--ink-800:#1A1A1A;
+  --success-50:#EAF5EF;--success-600:#1A7A42;
+  --warning-50:#FEF4E8;--warning-600:#9A5200;
+  --danger-50:#FDEDED;--danger-600:#B01C1C;
+  --ff-sans:"Noto Sans SC","Source Han Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --ff-mono:"Roboto Mono","JetBrains Mono","Courier New",monospace;
+  --fs-pad-small:14px;--fs-pad-body:16px;--fs-pad-title:16px;
+  --fs-pad-page:20px;--fs-pad-kpi:28px;
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:24px;
+  --radius-sm:2px;--radius-md:4px;--radius-lg:6px;
+  --h-appbar:56px;--h-tabbar:56px;--h-bottombar:48px;
+  --h-btn:48px;--h-btn-sm:38px;--h-field:40px;--h-row:44px;
+  --shadow-overlay:0 2px 12px rgba(7,68,153,0.12);
+  --scrim:rgba(4,29,72,0.48);
+  --focus-ring:0 0 0 2px var(--blue-300);
+  --selected-bg:var(--blue-50);--selected-edge:var(--blue-500);
+  --disabled-bg:var(--ink-200);--disabled-fg:var(--ink-400);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  font-family:var(--ff-sans);
+  font-size:var(--fs-pad-body);
+  color:var(--ink-700);
+  background:var(--ink-100);
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+}
+.num,.mono{font-family:var(--ff-mono);}
+
+/* === Pad 外框（1280×800） === */
+.pad{
+  width:1280px; height:800px;
+  background:var(--ink-50);
+  display:flex; flex-direction:column;
+  border:1px solid var(--ink-300);
+  border-radius:8px;
+  overflow:hidden;
+}
+
+/* === AppBar 56（白底，不做 Hero） === */
+.pad-appbar{
+  height:var(--h-appbar);
+  padding:0 var(--sp-5);
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--ink-0);
+  border-bottom:1px solid var(--ink-200);
+  color:var(--ink-700);
+}
+.ab-left{display:flex;align-items:center;gap:var(--sp-5);}
+.ab-brand{font-size:var(--fs-pad-body);font-weight:700;color:var(--blue-500);}
+.ab-crumb{font-size:var(--fs-pad-small);color:var(--ink-500);}
+.ab-right{display:flex;align-items:center;gap:var(--sp-4);font-size:var(--fs-pad-small);color:var(--ink-600);}
+.ab-logout{width:40px;height:40px;border:0;background:transparent;color:var(--ink-500);font-size:18px;cursor:pointer;}
+
+/* === 主区：左 Tabbar + 内容 === */
+.pad-main{flex:1;display:flex;min-height:0;}
+.pad-sidebar{
+  width:80px;
+  background:var(--ink-50);
+  border-right:1px solid var(--ink-200);
+  display:flex;flex-direction:column;
+}
+.sb-item{
+  height:var(--h-tabbar);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;
+  color:var(--ink-600);
+  font-size:var(--fs-pad-small);
+  border-left:3px solid transparent;
+  text-decoration:none;
+  cursor:pointer;
+}
+.sb-item.active{color:var(--blue-500);background:var(--blue-50);border-left-color:var(--blue-500);}
+.sb-ico{font-size:20px;}
+
+.pad-content{
+  flex:1;
+  overflow:auto;
+  padding:var(--sp-5);
+  background:var(--ink-50);
+}
+
+/* === 底 CTA 48 === */
+.bottom-cta{
+  height:var(--h-bottombar);
+  padding:0 var(--sp-5);
+  display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);
+  background:var(--ink-0);
+  border-top:1px solid var(--ink-200);
+}
+.bottom-cta .btn{height:40px;}
+
+/* === 按钮 === */
+.btn{
+  height:var(--h-btn);
+  min-width:88px;
+  padding:0 var(--sp-4);
+  font-size:var(--fs-pad-body);
+  font-weight:500;
+  border-radius:var(--radius-md);
+  border:1px solid transparent;
+  background:transparent;
+  cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);
+  font-family:inherit;
+}
+.btn-primary{background:var(--blue-500);color:var(--ink-0);}
+.btn-primary:hover{background:var(--blue-600);}
+.btn-secondary{background:var(--ink-0);border-color:var(--ink-300);color:var(--ink-700);}
+.btn-ghost{background:transparent;color:var(--ink-600);}
+.btn-danger{background:var(--ink-0);border-color:var(--danger-600);color:var(--danger-600);}
+
+.placeholder{
+  padding:var(--sp-5);
+  border:1px dashed var(--ink-300);
+  border-radius:var(--radius-md);
+  color:var(--ink-500);
+  text-align:center;
+  background:var(--ink-0);
+}
+</style>
+</head>
+<body>
+
+<div class="pad" role="application" aria-label="Pad 横屏骨架">
+
+  <!-- AppBar（严禁演化为 Hero） -->
+  <header class="pad-appbar">
+    <div class="ab-left">
+      <span class="ab-brand">Orchisky 现场端</span>
+      <span class="ab-crumb">模块 / 子模块</span>
+    </div>
+    <div class="ab-right">
+      <span>张师傅 · 机修班</span>
+      <button class="ab-logout" aria-label="退出">⎋</button>
+    </div>
+  </header>
+
+  <!-- 主区 -->
+  <div class="pad-main">
+
+    <nav class="pad-sidebar" aria-label="一级导航">
+      <a class="sb-item active"><span class="sb-ico">◨</span><span>工单</span></a>
+      <a class="sb-item"><span class="sb-ico">▦</span><span>计划</span></a>
+      <a class="sb-item"><span class="sb-ico">⚙</span><span>设备</span></a>
+      <a class="sb-item"><span class="sb-ico">▤</span><span>报表</span></a>
+    </nav>
+
+    <main class="pad-content">
+      <div class="placeholder">
+        这里放业务内容（工具栏 + 表格 + Drawer / 详情 / 表单等）<br>
+        严禁在 AppBar 下方再叠 Hero 大标题区
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Bottom CTA（可选，详情/表单页才用） -->
+  <footer class="bottom-cta">
+    <button class="btn btn-ghost">取消</button>
+    <div style="display:flex;gap:var(--sp-2);">
+      <button class="btn btn-secondary">暂存</button>
+      <button class="btn btn-primary">提交</button>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>
