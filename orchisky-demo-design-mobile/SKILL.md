@@ -56,8 +56,7 @@ references/page-patterns.md    ← 页面模式库（12 个高频页面）
 ```
 
 完整规范文档（深度参考）：
-- `/sessions/beautiful-lucid-ramanujan/mnt/outputs/Orchisky-Field-Design-System-V1.0.md`
-- `/sessions/beautiful-lucid-ramanujan/mnt/.claude/skills/orchisky-design/references/orchisky.md`（V2.0）
+- `/mnt/skills/user/orchisky-design/references/orchisky.md`（V2.0 品牌规范唯一真源）
 
 生成前至少完整读一遍 `design-tokens.md` 和 `components.md`，不要凭记忆。
 
@@ -91,7 +90,7 @@ references/page-patterns.md    ← 页面模式库（12 个高频页面）
 - 唯一允许的外部依赖：Google Fonts（Source Han Sans SC + Roboto Mono）+ Lucide Icons CDN
 - **禁止** Bootstrap / Ant Design / Tailwind / shadcn 等框架
 - **必须包含** `design-tokens.md § 9` 中的完整 `:root` 变量块
-- 文件保存到 `/sessions/beautiful-lucid-ramanujan/mnt/outputs/` 目录
+- 文件保存到 `/mnt/user-data/outputs/` 目录
 - 保存完毕调用 `present_files` 呈现给用户
 - 文件名规则：`orchisky-mobile-[设备]-[业务].html`，例：`orchisky-mobile-pda-rksqd.html` / `orchisky-mobile-pad-djjh.html`
 
