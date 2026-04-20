@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Pad · 点检计划 / 点检执行 · 兰之天 Orchisky EAM</title>
+<meta name="viewport" content="width=1280,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue-50:#EAF2FE;--blue-100:#D0E1FC;--blue-200:#A8C8F9;--blue-300:#6FA3F5;
+  --blue-400:#3A85F3;--blue-500:#1070F0;--blue-600:#0A5AC8;--blue-700:#074499;
+  --blue-800:#052E6E;--blue-900:#041D48;
+  --ink-0:#FFFFFF;--ink-50:#FAFAFA;--ink-100:#F5F5F5;--ink-200:#E2E2E2;
+  --ink-300:#CCCCCC;--ink-400:#BBBBBB;--ink-500:#888888;--ink-600:#555555;
+  --ink-700:#333333;--ink-800:#1A1A1A;
+  --success-50:#EAF5EF;--success-600:#1A7A42;
+  --warning-50:#FEF4E8;--warning-600:#9A5200;
+  --danger-50:#FDEDED;--danger-600:#B01C1C;
+  --ff-sans:"Noto Sans SC","Source Han Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --ff-mono:"Roboto Mono","JetBrains Mono","Courier New",monospace;
+  --fs-pad-small:14px;--fs-pad-body:16px;--fs-pad-title:16px;
+  --fs-pad-page:20px;--fs-pad-kpi:28px;
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:24px;
+  --radius-sm:2px;--radius-md:4px;--radius-lg:6px;
+  --h-appbar:56px;--h-tabbar:56px;--h-bottombar:48px;
+  --h-btn:48px;--h-btn-sm:38px;--h-field:40px;--h-row:44px;
+  --shadow-overlay:0 2px 12px rgba(7,68,153,0.12);
+  --scrim:rgba(4,29,72,0.48);
+  --focus-ring:0 0 0 2px var(--blue-300);
+  --selected-bg:var(--blue-50);--selected-edge:var(--blue-500);
+  --disabled-bg:var(--ink-200);--disabled-fg:var(--ink-400);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:var(--ff-sans);font-size:var(--fs-pad-body);color:var(--ink-700);background:#eceff3;padding:32px 24px;}
+.num,.mono{font-family:var(--ff-mono);letter-spacing:0.01em;}
+.scene-title{max-width:1360px;margin:0 auto 24px;font-size:14px;color:var(--ink-500);}
+.scene-title b{color:var(--ink-800);font-weight:700;margin-right:8px;}
+.stage{max-width:1360px;margin:0 auto;display:flex;flex-direction:column;gap:48px;align-items:center;}
+.frame{display:flex;flex-direction:column;align-items:center;gap:12px;}
+.frame-label{font-size:13px;color:var(--ink-500);}
+.pad{width:1280px;height:800px;background:var(--ink-50);display:flex;flex-direction:column;border:1px solid var(--ink-300);border-radius:8px;overflow:hidden;}
+.pad-appbar{height:var(--h-appbar);padding:0 var(--sp-5);display:flex;align-items:center;justify-content:space-between;background:var(--ink-0);border-bottom:1px solid var(--ink-200);color:var(--ink-700);}
+.ab-left{display:flex;align-items:center;gap:var(--sp-5);}
+.ab-brand{font-size:var(--fs-pad-body);font-weight:700;color:var(--blue-500);}
+.ab-crumb{font-size:var(--fs-pad-small);color:var(--ink-500);}
+.ab-right{display:flex;align-items:center;gap:var(--sp-4);font-size:var(--fs-pad-small);color:var(--ink-600);}
+.ab-logout{width:40px;height:40px;border:0;background:transparent;color:var(--ink-500);font-size:18px;cursor:pointer;}
+.pad-main{flex:1;display:flex;min-height:0;}
+.pad-sidebar{width:80px;background:var(--ink-50);border-right:1px solid var(--ink-200);display:flex;flex-direction:column;}
+.sb-item{height:var(--h-tabbar);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--ink-600);font-size:var(--fs-pad-small);border-left:3px solid transparent;text-decoration:none;cursor:pointer;}
+.sb-item.active{color:var(--blue-500);background:var(--blue-50);border-left-color:var(--blue-500);}
+.sb-ico{font-size:20px;}
+.pad-content{flex:1;overflow:auto;padding:var(--sp-5);background:var(--ink-50);}
+.sub-topbar{height:40px;margin-bottom:var(--sp-4);display:flex;align-items:center;gap:var(--sp-3);font-size:var(--fs-pad-small);color:var(--ink-600);}
+.sub-back{background:none;border:0;color:var(--ink-600);cursor:pointer;font-size:16px;}
+.sub-sn{color:var(--ink-800);font-weight:500;font-family:var(--ff-mono);}
+.toolbar{background:var(--ink-0);border:1px solid var(--ink-200);border-radius:var(--radius-md);padding:var(--sp-3) var(--sp-4);display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap;margin-bottom:var(--sp-4);}
+.tb-select,.tb-date{height:var(--h-field);padding:0 var(--sp-3);border:1px solid var(--ink-300);border-radius:var(--radius-md);background:var(--ink-0);color:var(--ink-700);font-family:inherit;font-size:var(--fs-pad-small);min-width:140px;}
+.tb-search{flex:1;min-width:240px;height:var(--h-field);padding:0 var(--sp-3);border:1px solid var(--ink-300);border-radius:var(--radius-md);background:var(--ink-0);color:var(--ink-700);font-size:var(--fs-pad-small);font-family:inherit;}
+.tb-spacer{flex:1;}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-4);margin-bottom:var(--sp-4);}
+.kpi-card{padding:var(--sp-4);background:var(--ink-0);border:1px solid var(--ink-200);border-radius:var(--radius-md);}
+.kpi-label{font-size:var(--fs-pad-small);color:var(--ink-500);}
+.kpi-value{margin:var(--sp-2) 0 var(--sp-1);display:flex;align-items:baseline;gap:var(--sp-2);}
+.kpi-num{font-size:var(--fs-pad-kpi);font-weight:700;color:var(--ink-800);line-height:1;font-family:var(--ff-mono);}
+.kpi-num.success{color:var(--success-600);}
+.kpi-num.warning{color:var(--warning-600);}
+.kpi-num.danger{color:var(--danger-600);}
+.kpi-unit{font-size:var(--fs-pad-small);color:var(--ink-500);}
+.kpi-sub{font-size:var(--fs-pad-small);color:var(--ink-500);}
+.workspace{display:grid;grid-template-columns:1fr 480px;gap:var(--sp-4);}
+.card{background:var(--ink-0);border:1px solid var(--ink-200);border-radius:var(--radius-md);overflow:hidden;}
+.card-head{height:48px;padding:0 var(--sp-4);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--ink-200);}
+.card-title{font-size:var(--fs-pad-body);color:var(--ink-800);font-weight:500;}
+.card-extra{font-size:var(--fs-pad-small);color:var(--ink-500);}
+.pad-table{width:100%;border-collapse:collapse;}
+.pad-table thead th{height:40px;padding:0 var(--sp-4);text-align:left;font-weight:500;font-size:var(--fs-pad-small);color:var(--ink-600);background:var(--ink-100);border-bottom:1px solid var(--ink-200);}
+.pad-table tbody td{height:var(--h-row);padding:0 var(--sp-4);font-size:var(--fs-pad-body);color:var(--ink-800);border-bottom:1px solid var(--ink-200);}
+.pad-table tbody tr:hover td{background:var(--ink-50);}
+.pad-table tbody tr.selected td{background:var(--selected-bg);}
+.pad-table tbody tr.selected td:first-child{box-shadow:inset 4px 0 0 var(--selected-edge);}
+.align-right{text-align:right;}
+.chip{display:inline-flex;align-items:center;gap:var(--sp-1);padding:2px var(--sp-2);border-radius:var(--radius-sm);font-size:var(--fs-pad-small);line-height:1.4;border:1px solid transparent;}
+.chip-neutral{background:var(--ink-100);color:var(--ink-700);}
+.chip-info{background:var(--blue-50);color:var(--blue-600);}
+.chip-success{background:var(--success-50);color:var(--success-600);}
+.chip-warning{background:var(--warning-50);color:var(--warning-600);}
+.chip-danger{background:var(--danger-50);color:var(--danger-600);}
+.row-action{background:none;border:0;color:var(--blue-500);font-size:var(--fs-pad-small);cursor:pointer;font-family:inherit;}
+.drawer{background:var(--ink-0);border:1px solid var(--ink-200);border-radius:var(--radius-md);display:flex;flex-direction:column;overflow:hidden;}
+.drawer-head{height:var(--h-appbar);padding:0 var(--sp-4);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--ink-200);}
+.drawer-title{font-size:var(--fs-pad-body);color:var(--ink-800);font-weight:500;}
+.drawer-close{background:none;border:0;color:var(--ink-500);font-size:18px;cursor:pointer;}
+.drawer-body{padding:var(--sp-4);overflow:auto;max-height:540px;}
+.kv-row{display:flex;justify-content:space-between;padding:var(--sp-2) 0;font-size:var(--fs-pad-small);border-bottom:1px solid var(--ink-200);}
+.kv-row:last-child{border-bottom:0;}
+.kv-key{color:var(--ink-500);}
+.kv-val{color:var(--ink-800);}
+.kv-val.num{font-family:var(--ff-mono);}
+.drawer-section-title{margin:var(--sp-3) 0 var(--sp-2);font-size:var(--fs-pad-small);color:var(--ink-600);font-weight:500;}
+.check-list{list-style:none;margin:0;padding:0;}
+.check-item{padding:var(--sp-3) 0;border-bottom:1px solid var(--ink-200);display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);}
+.check-item:last-child{border-bottom:0;}
+.ci-title{font-size:var(--fs-pad-body);color:var(--ink-800);}
+.ci-sub{font-size:var(--fs-pad-small);color:var(--ink-500);margin-top:2px;}
+.seg{display:inline-flex;border:1px solid var(--ink-300);border-radius:var(--radius-md);overflow:hidden;background:var(--ink-0);}
+.seg-btn{height:38px;padding:0 var(--sp-3);background:var(--ink-0);color:var(--ink-600);border:0;border-right:1px solid var(--ink-200);font-family:inherit;font-size:var(--fs-pad-small);cursor:pointer;}
+.seg-btn:last-child{border-right:0;}
+.seg-btn.on-success{background:var(--success-50);color:var(--success-600);}
+.seg-btn.on-warning{background:var(--warning-50);color:var(--warning-600);}
+.seg-btn.on-danger{background:var(--danger-50);color:var(--danger-600);}
+.bottom-cta{height:var(--h-bottombar);padding:0 var(--sp-5);display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);background:var(--ink-0);border-top:1px solid var(--ink-200);}
+.btn{height:var(--h-btn);min-width:88px;padding:0 var(--sp-4);font-size:var(--fs-pad-body);font-weight:500;border-radius:var(--radius-md);border:1px solid transparent;background:transparent;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);}
+.btn-primary{background:var(--blue-500);color:var(--ink-0);}
+.btn-secondary{background:var(--ink-0);border-color:var(--ink-300);color:var(--ink-700);}
+.btn-danger{background:var(--ink-0);border-color:var(--danger-600);color:var(--danger-600);}
+.btn-ghost{background:transparent;color:var(--ink-600);}
+.btn-sm{height:var(--h-btn-sm);min-width:64px;font-size:var(--fs-pad-small);}
+.bottom-cta .btn{height:40px;}
+.spec-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;background:var(--blue-50);color:var(--blue-600);border-radius:var(--radius-sm);font-size:11px;}
+</style>
+</head>
+<body>
+
+<div class="scene-title">
+  <b>场景</b>机修班长张师傅 Pad 执行 04/20 早班点检 · <b>设备</b>注塑机 01 ·
+  <b>对齐规范</b>Orchisky Design V2.0 + Field V1.0（Pad 内页无 Hero）
+</div>
+
+<div class="stage">
+
+  <!-- 屏 1：工单列表 -->
+  <div class="frame">
+    <div class="pad">
+      <header class="pad-appbar">
+        <div class="ab-left">
+          <span class="ab-brand">Orchisky 现场端</span>
+          <span class="ab-crumb">设备管理 / 点检工单 <span style="color:var(--ink-800);"> / 今日待点检</span></span>
+        </div>
+        <div class="ab-right">
+          <span>张师傅 · 机修班 · 早班</span>
+          <button class="ab-logout">⎋</button>
+        </div>
+      </header>
+      <div class="pad-main">
+        <nav class="pad-sidebar">
+          <a class="sb-item"><span class="sb-ico">◨</span><span>首页</span></a>
+          <a class="sb-item active"><span class="sb-ico">▦</span><span>工单</span></a>
+          <a class="sb-item"><span class="sb-ico">⚙</span><span>设备</span></a>
+          <a class="sb-item"><span class="sb-ico">▤</span><span>报表</span></a>
+        </nav>
+        <main class="pad-content">
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-label">今日计划</div>
+              <div class="kpi-value"><span class="kpi-num">18</span><span class="kpi-unit">台</span></div>
+              <div class="kpi-sub">早班 <span class="num">12</span> · 中班 <span class="num">6</span></div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">已完成</div>
+              <div class="kpi-value"><span class="kpi-num success">12</span><span class="kpi-unit">台</span></div>
+              <div class="kpi-sub">合格率 <span class="num">91.7</span>%</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">超期 / 待处理</div>
+              <div class="kpi-value"><span class="kpi-num warning">1</span><span class="kpi-unit">台</span></div>
+              <div class="kpi-sub">CNC-02-05 · <span class="num">2.5</span>h</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">异常待复查</div>
+              <div class="kpi-value"><span class="kpi-num danger">2</span><span class="kpi-unit">项</span></div>
+              <div class="kpi-sub">注塑机 01 · 绕线机-A02</div>
+            </div>
+          </div>
+          <div class="toolbar">
+            <select class="tb-select"><option>班次：早班（08:00–16:00）</option></select>
+            <select class="tb-select"><option>状态：全部</option><option>待执行</option><option>执行中</option><option>异常</option><option>已完成</option></select>
+            <select class="tb-select"><option>车间：电机装配一车间</option></select>
+            <input class="tb-search" placeholder="搜索设备编码 / 工单号 / 责任人" />
+            <div class="tb-spacer"></div>
+            <button class="btn btn-secondary btn-sm">导出</button>
+            <button class="btn btn-primary btn-sm">+ 下发临时工单</button>
+          </div>
+          <div class="workspace">
+            <div class="card">
+              <div class="card-head">
+                <span class="card-title">点检工单（共 <span class="num">18</span> · 已选 <span class="num">1</span>）</span>
+                <span class="card-extra">按计划开始时间排序</span>
+              </div>
+              <table class="pad-table">
+                <thead>
+                  <tr>
+                    <th style="width:180px;">工单号</th><th>设备</th><th>类型</th><th>责任人</th>
+                    <th style="width:100px;">状态</th><th class="align-right" style="width:110px;">计划时间</th><th style="width:80px;">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="selected">
+                    <td class="num">DJ-20260420-012</td><td>注塑机 01</td><td>日常点检</td><td>张师傅</td>
+                    <td><span class="chip chip-info">进行中</span></td><td class="num align-right">09:30</td>
+                    <td><button class="row-action">详情</button></td>
+                  </tr>
+                  <tr>
+                    <td class="num">DJ-20260420-013</td><td>CNC-02-05</td><td>日常点检</td><td>赵伟明</td>
+                    <td><span class="chip chip-warning">超期 2.5h</span></td><td class="num align-right">07:00</td>
+                    <td><button class="row-action">详情</button></td>
+                  </tr>
+                  <tr>
+                    <td class="num">DJ-20260420-014</td><td>绕线机-A02</td><td>周期点检</td><td>李文静</td>
+                    <td><span class="chip chip-danger">异常待复</span></td><td class="num align-right">08:15</td>
+                    <td><button class="row-action">详情</button></td>
+                  </tr>
+                  <tr>
+                    <td class="num">DJ-20260420-015</td><td>贴片机 SMT-01</td><td>日常点检</td><td>陈志强</td>
+                    <td><span class="chip chip-success">已完成</span></td><td class="num align-right">08:30</td>
+                    <td><button class="row-action">详情</button></td>
+                  </tr>
+                  <tr>
+                    <td class="num">DJ-20260420-016</td><td>装配-A 线</td><td>日常点检</td><td>王建国</td>
+                    <td><span class="chip chip-neutral">待执行</span></td><td class="num align-right">10:00</td>
+                    <td><button class="row-action">详情</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <aside class="drawer">
+              <header class="drawer-head">
+                <span class="drawer-title">DJ-20260420-012 · 注塑机 01</span>
+                <button class="drawer-close">✕</button>
+              </header>
+              <div class="drawer-body">
+                <div class="kv-row"><span class="kv-key">设备编码</span><span class="kv-val num">ZS-01-A</span></div>
+                <div class="kv-row"><span class="kv-key">车间 / 产线</span><span class="kv-val">电机装配一车间 · 装配-A 线</span></div>
+                <div class="kv-row"><span class="kv-key">计划时间</span><span class="kv-val num">2026-04-20 09:30</span></div>
+                <div class="kv-row"><span class="kv-key">责任人</span><span class="kv-val">张师傅 · ORC-2019-0847</span></div>
+                <div class="kv-row"><span class="kv-key">点检项</span><span class="kv-val"><span class="num">12</span> 项</span></div>
+                <div class="kv-row"><span class="kv-key">当前状态</span><span class="kv-val"><span class="chip chip-info">进行中 8/12</span></span></div>
+                <div class="drawer-section-title">异常记录</div>
+                <div style="padding:var(--sp-3);background:var(--danger-50);border:1px solid var(--danger-600);border-radius:var(--radius-md);color:var(--danger-600);font-size:var(--fs-pad-small);">
+                  主轴温度 <span class="num">78</span>°C（阈值 <span class="num">70</span>°C），请现场确认
+                </div>
+              </div>
+            </aside>
+          </div>
+        </main>
+      </div>
+    </div>
+    <div class="frame-label">屏 1 · 点检工单列表（Pad 1280×800 · 无 Hero）</div>
+  </div>
+
+  <!-- 屏 2：点检执行 -->
+  <div class="frame">
+    <div class="pad">
+      <header class="pad-appbar">
+        <div class="ab-left">
+          <span class="ab-brand">Orchisky 现场端</span>
+          <span class="ab-crumb">设备管理 / 点检工单 / <span style="color:var(--ink-800);">点检执行</span></span>
+        </div>
+        <div class="ab-right">
+          <span>张师傅 · 机修班 · 早班</span>
+          <button class="ab-logout">⎋</button>
+        </div>
+      </header>
+      <div class="pad-main">
+        <nav class="pad-sidebar">
+          <a class="sb-item"><span class="sb-ico">◨</span><span>首页</span></a>
+          <a class="sb-item active"><span class="sb-ico">▦</span><span>工单</span></a>
+          <a class="sb-item"><span class="sb-ico">⚙</span><span>设备</span></a>
+          <a class="sb-item"><span class="sb-ico">▤</span><span>报表</span></a>
+        </nav>
+        <main class="pad-content" style="display:flex;flex-direction:column;">
+          <div class="sub-topbar">
+            <button class="sub-back">← 返回列表</button>
+            <span class="sub-sn">DJ-20260420-012</span>
+            <span>· 注塑机 01 · 日常点检</span>
+            <span class="chip chip-info">进行中</span>
+          </div>
+          <div class="workspace" style="flex:1;min-height:0;">
+            <div class="card" style="display:flex;flex-direction:column;min-height:0;">
+              <div class="card-head">
+                <span class="card-title">点检项（<span class="num">12</span>）</span>
+                <span class="card-extra">已完成 <span class="num">8</span> · 异常 <span class="num">1</span> · 剩余 <span class="num">3</span></span>
+              </div>
+              <div style="padding:0 var(--sp-4);overflow:auto;">
+                <ul class="check-list">
+                  <li class="check-item">
+                    <div><div class="ci-title">1 · 主轴温度</div><div class="ci-sub">阈值 ≤70°C · 测量值 <span class="num">62</span>°C</div></div>
+                    <div class="seg"><button class="seg-btn on-success">✓ 合格</button><button class="seg-btn">⚠ 异常</button><button class="seg-btn">— 跳过</button></div>
+                  </li>
+                  <li class="check-item">
+                    <div><div class="ci-title">2 · 皮带张紧度</div><div class="ci-sub">阈值 <span class="num">0.3</span>–<span class="num">0.5</span> MPa · 测量值 <span class="num">0.35</span> MPa</div></div>
+                    <div class="seg"><button class="seg-btn on-success">✓ 合格</button><button class="seg-btn">⚠ 异常</button><button class="seg-btn">— 跳过</button></div>
+                  </li>
+                  <li class="check-item">
+                    <div><div class="ci-title">3 · 润滑油位</div><div class="ci-sub">阈值 ≥<span class="num">60</span>% · 测量值 <span class="num">72</span>%</div></div>
+                    <div class="seg"><button class="seg-btn on-success">✓ 合格</button><button class="seg-btn">⚠ 异常</button><button class="seg-btn">— 跳过</button></div>
+                  </li>
+                  <li class="check-item" style="background:var(--danger-50);margin:0 -16px;padding:var(--sp-3) var(--sp-4);border:1px solid var(--danger-600);border-radius:var(--radius-md);">
+                    <div><div class="ci-title">4 · 液压系统温度</div><div class="ci-sub" style="color:var(--danger-600);">阈值 ≤<span class="num">70</span>°C · 测量值 <span class="num">78</span>°C · 超标 <span class="num">8</span>°C</div></div>
+                    <div class="seg"><button class="seg-btn">✓ 合格</button><button class="seg-btn on-danger">⚠ 异常</button><button class="seg-btn">— 跳过</button></div>
+                  </li>
+                  <li class="check-item">
+                    <div><div class="ci-title">5 · 急停按钮功能</div><div class="ci-sub">测试按压响应 · 合格</div></div>
+                    <div class="seg"><button class="seg-btn on-success">✓ 合格</button><button class="seg-btn">⚠ 异常</button><button class="seg-btn">— 跳过</button></div>
+                  </li>
+                  <li class="check-item">
+                    <div><div class="ci-title">6 · 气路压力</div><div class="ci-sub">阈值 <span class="num">0.55</span>–<span class="num">0.75</span> MPa · 测量值 <span class="num">0.62</span> MPa</div></div>
+                    <div class="seg"><button class="seg-btn on-success">✓ 合格</button><button class="seg-btn">⚠ 异常</button><button class="seg-btn">— 跳过</button></div>
+                  </li>
+                  <li class="check-item" style="opacity:0.5;">
+                    <div><div class="ci-title">7 – 12 · 未完成项</div><div class="ci-sub">冷却水温 / 控制柜温度 / 加热元件 / 传感器 / 安全围栏</div></div>
+                    <div class="seg"><button class="seg-btn">✓ 合格</button><button class="seg-btn">⚠ 异常</button><button class="seg-btn">— 跳过</button></div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <aside class="drawer">
+              <header class="drawer-head">
+                <span class="drawer-title">异常：液压系统温度</span>
+                <span class="chip chip-danger">超标 8°C</span>
+              </header>
+              <div class="drawer-body">
+                <div class="kv-row"><span class="kv-key">测量值</span><span class="kv-val num">78 °C</span></div>
+                <div class="kv-row"><span class="kv-key">阈值</span><span class="kv-val num">≤ 70 °C</span></div>
+                <div class="kv-row"><span class="kv-key">初判故障类</span><span class="kv-val">液压 / 散热</span></div>
+                <div class="drawer-section-title">异常描述</div>
+                <textarea style="width:100%;height:80px;padding:var(--sp-3);border:1px solid var(--ink-300);border-radius:var(--radius-md);font-family:inherit;font-size:var(--fs-pad-small);color:var(--ink-800);resize:none;">液压油温持续偏高，疑似冷却风扇转速下降，需机修二班现场复核。</textarea>
+                <div class="drawer-section-title">附件</div>
+                <div style="display:flex;gap:var(--sp-2);">
+                  <div style="width:72px;height:72px;background:var(--ink-100);border:1px dashed var(--ink-300);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;color:var(--ink-500);font-size:12px;">照片 1</div>
+                  <div style="width:72px;height:72px;background:var(--ink-0);border:1px dashed var(--ink-300);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;color:var(--ink-500);font-size:18px;">＋</div>
+                </div>
+                <div class="drawer-section-title">处理建议</div>
+                <label style="display:flex;gap:var(--sp-2);font-size:var(--fs-pad-small);color:var(--ink-700);margin-bottom:var(--sp-2);">
+                  <input type="checkbox" checked> 自动生成维修工单并派工给机修二班
+                </label>
+                <label style="display:flex;gap:var(--sp-2);font-size:var(--fs-pad-small);color:var(--ink-700);">
+                  <input type="checkbox"> 同步通知线长停机观察
+                </label>
+              </div>
+            </aside>
+          </div>
+        </main>
+      </div>
+      <footer class="bottom-cta">
+        <button class="btn btn-ghost">保存并继续</button>
+        <div style="display:flex;gap:var(--sp-2);align-items:center;">
+          <span class="spec-badge">✓ Orchisky V2.0 / Field V1.0</span>
+          <button class="btn btn-secondary btn-sm">暂存</button>
+          <button class="btn btn-danger btn-sm">驳回本单</button>
+          <button class="btn btn-primary btn-sm">提交并生成维修工单</button>
+        </div>
+      </footer>
+    </div>
+    <div class="frame-label">屏 2 · 点检执行（Pad 1280×800 · 四色 CTA 仅出现在底部条）</div>
+  </div>
+
+</div>
+</body>
+</html>
