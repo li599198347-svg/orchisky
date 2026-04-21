@@ -1,0 +1,131 @@
+/* =================================================================
+   Orchisky Design System — CSS Variables (V2.0)
+   主色 blue-500 #1070F0 | 公司级基准线
+   ================================================================= */
+
+:root {
+
+  /* ---------------------------------------------------------------
+     Brand Blue — 9-step scale
+  --------------------------------------------------------------- */
+  --blue-50:  #EAF2FE;
+  --blue-100: #D0E1FC;
+  --blue-200: #A8C8F9;
+  --blue-300: #6FA3F5;
+  --blue-400: #3A85F3;
+  --blue-500: #1070F0;   /* ★ Primary — buttons, links, selection */
+  --blue-600: #0A5AC8;   /* Hover */
+  --blue-700: #074499;   /* Dark bg, large-screen header */
+  --blue-800: #052E6E;   /* Deep navy */
+  --blue-900: #041D48;   /* Shadow reference */
+
+  /* ---------------------------------------------------------------
+     Ink (Neutral) — 9-step scale
+  --------------------------------------------------------------- */
+  --ink-0:   #FFFFFF;   /* Card / page base */
+  --ink-50:  #FAFAFA;   /* Page background */
+  --ink-100: #F5F5F5;   /* Table header, disabled bg */
+  --ink-200: #E2E2E2;   /* Dividers, borders */
+  --ink-300: #CCCCCC;   /* Subtle borders */
+  --ink-400: #BBBBBB;   /* Placeholder */
+  --ink-500: #888888;   /* Caption, footer */
+  --ink-600: #555555;   /* Secondary text */
+  --ink-700: #333333;   /* Body text */
+  --ink-800: #1A1A1A;   /* Heading, Action Title — deepest allowed */
+  /* NOTE: #000000 pure black is FORBIDDEN */
+
+  /* ---------------------------------------------------------------
+     Semantic
+  --------------------------------------------------------------- */
+  --success-50:  #EAF5EF;
+  --success-600: #1A7A42;
+  --warning-50:  #FEF4E8;
+  --warning-600: #9A5200;
+  --danger-50:   #FDEDED;
+  --danger-600:  #B01C1C;
+
+  /* ---------------------------------------------------------------
+     Typography
+  --------------------------------------------------------------- */
+  /* Primary sans (UI / headings) */
+  --font-sans:
+    'Source Han Sans SC', 'Noto Sans SC',  /* preferred */
+    'Microsoft YaHei', 'PingFang SC', 'Heiti SC',  /* fallback */
+    system-ui, sans-serif;
+
+  /* Primary serif (Action Title / large callouts) */
+  --font-serif:
+    'Source Han Serif SC', 'Noto Serif SC',  /* preferred */
+    'Songti SC', 'SimSun',                   /* fallback */
+    serif;
+
+  /* Monospace (numbers / codes / barcodes) */
+  --font-mono:
+    'JetBrains Mono', 'Roboto Mono', 'Consolas', monospace;
+
+  /* ---------------------------------------------------------------
+     Radius
+  --------------------------------------------------------------- */
+  --radius-tag:  2px;   /* Tag, Badge */
+  --radius-btn:  4px;   /* Button, Input */
+  --radius-card: 6px;   /* Card, Modal */
+  /* FORBIDDEN: > 6px (UI), 999px capsule */
+
+  /* ---------------------------------------------------------------
+     Spacing (8-grid)
+  --------------------------------------------------------------- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  /* ---------------------------------------------------------------
+     Elevation (Drawer / floating only — cards use border)
+  --------------------------------------------------------------- */
+  --shadow-overlay: 0 2px 12px rgba(7, 68, 153, 0.12);
+  /* Note: cards use 1px var(--ink-200) border, NO box-shadow */
+
+  /* ---------------------------------------------------------------
+     Focus ring
+  --------------------------------------------------------------- */
+  --focus-ring: 0 0 0 2px var(--blue-300);
+
+  /* ---------------------------------------------------------------
+     Interactive states
+  --------------------------------------------------------------- */
+  --selected-bg:   var(--blue-50);
+  --selected-edge: var(--blue-500);
+  --disabled-bg:   var(--ink-200);
+  --disabled-fg:   var(--ink-400);
+
+  /* ---------------------------------------------------------------
+     Component heights (touch-safe, field / PDA context)
+  --------------------------------------------------------------- */
+  --h-btn:       48px;   /* Primary action button */
+  --h-btn-sm:    38px;   /* Secondary / inline button */
+  --h-field:     40px;   /* Input, Select */
+  --h-row:       44px;   /* Table / List row */
+  --h-appbar:    56px;   /* AppBar (Pad) */
+  --h-topbar:    56px;   /* Topbar (PDA) */
+  --h-statusbar: 24px;   /* Status bar (PDA) */
+  --h-bottombar: 48px;   /* Bottom CTA strip */
+
+}
+
+/* =================================================================
+   Base resets (optional — include only when bootstrapping a page)
+   ================================================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  color: var(--ink-700);
+  background: var(--ink-0);
+  -webkit-font-smoothing: antialiased;
+}
+
+.num, .mono { font-family: var(--font-mono); letter-spacing: 0.01em; }
