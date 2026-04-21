@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Orchisky · 品牌官网</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html,body{margin:0;padding:0;background:#fff;font-family:var(--ff-sans);color:var(--ink-700)}
+  *{box-sizing:border-box}
+  a{text-decoration:none}
+  button{font-family:inherit}
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="TopBar.jsx"></script>
+<script type="text/babel" src="Hero.jsx"></script>
+<script type="text/babel" src="SolutionGrid.jsx"></script>
+<script type="text/babel" src="CaseTable.jsx"></script>
+<script type="text/babel" src="Footer.jsx"></script>
+<script type="text/babel">
+  function App(){
+    const [active, setActive] = React.useState('home');
+    const nav = (id) => { setActive(id); window.scrollTo(0,0); };
+    return <div>
+      <TopBar active={active} onNav={nav} />
+      {active === 'home' && <>
+        <Hero onCTA={() => nav('solutions')} />
+        <SolutionGrid />
+        <CaseTable />
+      </>}
+      {active === 'solutions' && <SolutionGrid />}
+      {active === 'cases' && <CaseTable />}
+      {active === 'about' && <div style={{maxWidth:1200,margin:'0 auto',padding:'80px 24px'}}><h2 style={{fontSize:36,color:'#1A1A1A'}}>关于我们</h2><p style={{fontFamily:'Noto Serif SC, serif',fontSize:16,color:'#555',lineHeight:1.8,maxWidth:720}}>江苏兰之天软件技术有限公司成立于 2014 年，总部位于苏州工业园区。我们是一家专注于制造业数字化转型的软件与咋询公司。</p></div>}
+      {active === 'contact' && <div style={{maxWidth:1200,margin:'0 auto',padding:'80px 24px'}}><h2 style={{fontSize:36,color:'#1A1A1A'}}>联系我们</h2><div style={{fontSize:15,color:'#555',lineHeight:2,fontFamily:'Roboto Mono, monospace'}}>contact@orchisky.com<br/>+86 512 XXXX XXXX</div></div>}
+      <Footer />
+    </div>;
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

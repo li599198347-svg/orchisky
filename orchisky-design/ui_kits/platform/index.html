@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Orchisky 平台 · 管理控制台</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  html,body{margin:0;padding:0;background:#F5F5F5;font-family:var(--ff-sans)}
+  *{box-sizing:border-box}
+  button{font-family:inherit;white-space:nowrap}
+  input::placeholder{color:rgba(0,0,0,0.25)}
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="AppHeader.jsx"></script>
+<script type="text/babel" src="SideNav.jsx"></script>
+<script type="text/babel" src="Dashboard.jsx"></script>
+<script type="text/babel" src="OrderList.jsx"></script>
+<script type="text/babel" src="OrderDetail.jsx"></script>
+<script type="text/babel">
+  function App(){
+    const [view, setView] = React.useState('dashboard');
+    const go = (v) => { setView(v); window.scrollTo(0,0); };
+    const navKey = view === 'detail' ? 'orders' : view;
+    return (
+      <div>
+        <AppHeader />
+        <div style={{display:'flex', background:'#F5F5F5', minHeight:'calc(100vh - 56px)'}}>
+          <SideNav active={navKey} onNav={go} />
+          <main style={{flex:1}}>
+            {view === 'dashboard' && <Dashboard onOpen={go} />}
+            {view === 'orders' && <OrderList onOpen={go} />}
+            {view === 'detail' && <OrderDetail onClose={() => go('orders')} />}
+          </main>
+        </div>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
