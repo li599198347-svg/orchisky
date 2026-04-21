@@ -37,7 +37,7 @@ No mixing with Font Awesome, Material Icons, Heroicons, or emoji substitutes.
 - Destructive actions: `#B01C1C`
 - Disabled: `ink-400 #BBBBBB`
 
-Icons **never** carry their own decorative color; they reflect the semantic role of the surrounding element.
+Icons **never** carry their own decorative color.
 
 ---
 
@@ -50,11 +50,10 @@ Icons **never** carry their own decorative color; they reflect the semantic role
 | 3D / skeuomorphic icons | Conflicts with flat design principle |
 | Emoji as functional icons | Inaccessible, unscalable |
 | Mixing Lucide with another library | Inconsistent stroke weight |
-| Custom gradient fills | Not permitted in any Orchisky surface |
 
 ---
 
-## Import (HTML / JSX)
+## Import
 
 ```html
 <!-- CDN (HTML prototype) -->
@@ -64,7 +63,6 @@ Icons **never** carry their own decorative color; they reflect the semantic role
 ```
 
 ```jsx
-// React / JSX
 import { Package, ChevronRight, AlertTriangle } from 'lucide-react';
 <Package size={20} strokeWidth={2} />
 ```
@@ -73,27 +71,18 @@ import { Package, ChevronRight, AlertTriangle } from 'lucide-react';
 
 ## Common icon vocabulary
 
-| Action | Icon name |
-|--------|-----------|
-| Add / New | `plus`, `plus-circle` |
+| Action | Icon |
+|--------|------|
+| Add | `plus`, `plus-circle` |
 | Edit | `pencil`, `edit-2` |
 | Delete | `trash-2` |
 | Search | `search` |
 | Filter | `filter`, `sliders-horizontal` |
-| Export | `download`, `file-down` |
-| Print | `printer` |
-| Refresh | `refresh-cw` |
-| Settings | `settings-2` |
-| Close / Cancel | `x` |
-| Confirm / Done | `check`, `check-circle-2` |
-| Warning | `alert-triangle` |
-| Info | `info` |
-| Error | `x-circle` |
+| Export | `download` |
 | Scan (PDA) | `scan-line`, `qr-code` |
 | Warehouse | `warehouse` |
-| Package | `package`, `box` |
-| User / Worker | `user`, `hard-hat` |
-| Chart | `bar-chart-2`, `line-chart` |
+| Warning | `alert-triangle` |
+| Done | `check`, `check-circle-2` |
 
 ---
 

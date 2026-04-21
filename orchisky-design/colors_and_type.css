@@ -31,8 +31,7 @@
   --ink-500: #888888;   /* Caption, footer */
   --ink-600: #555555;   /* Secondary text */
   --ink-700: #333333;   /* Body text */
-  --ink-800: #1A1A1A;   /* Heading, Action Title — deepest allowed */
-  /* NOTE: #000000 pure black is FORBIDDEN */
+  --ink-800: #1A1A1A;   /* Heading — deepest allowed; #000 FORBIDDEN */
 
   /* ---------------------------------------------------------------
      Semantic
@@ -47,28 +46,25 @@
   /* ---------------------------------------------------------------
      Typography
   --------------------------------------------------------------- */
-  /* Primary sans (UI / headings) */
   --font-sans:
-    'Source Han Sans SC', 'Noto Sans SC',  /* preferred */
-    'Microsoft YaHei', 'PingFang SC', 'Heiti SC',  /* fallback */
+    'Source Han Sans SC', 'Noto Sans SC',
+    'Microsoft YaHei', 'PingFang SC', 'Heiti SC',
     system-ui, sans-serif;
 
-  /* Primary serif (Action Title / large callouts) */
   --font-serif:
-    'Source Han Serif SC', 'Noto Serif SC',  /* preferred */
-    'Songti SC', 'SimSun',                   /* fallback */
+    'Source Han Serif SC', 'Noto Serif SC',
+    'Songti SC', 'SimSun',
     serif;
 
-  /* Monospace (numbers / codes / barcodes) */
   --font-mono:
     'JetBrains Mono', 'Roboto Mono', 'Consolas', monospace;
 
   /* ---------------------------------------------------------------
      Radius
   --------------------------------------------------------------- */
-  --radius-tag:  2px;   /* Tag, Badge */
-  --radius-btn:  4px;   /* Button, Input */
-  --radius-card: 6px;   /* Card, Modal */
+  --radius-tag:  2px;
+  --radius-btn:  4px;
+  --radius-card: 6px;
   /* FORBIDDEN: > 6px (UI), 999px capsule */
 
   /* ---------------------------------------------------------------
@@ -83,10 +79,9 @@
   --sp-7: 48px;
 
   /* ---------------------------------------------------------------
-     Elevation (Drawer / floating only — cards use border)
+     Elevation (Drawer/floating only — cards use border)
   --------------------------------------------------------------- */
   --shadow-overlay: 0 2px 12px rgba(7, 68, 153, 0.12);
-  /* Note: cards use 1px var(--ink-200) border, NO box-shadow */
 
   /* ---------------------------------------------------------------
      Focus ring
@@ -102,22 +97,19 @@
   --disabled-fg:   var(--ink-400);
 
   /* ---------------------------------------------------------------
-     Component heights (touch-safe, field / PDA context)
+     Component heights
   --------------------------------------------------------------- */
-  --h-btn:       48px;   /* Primary action button */
-  --h-btn-sm:    38px;   /* Secondary / inline button */
-  --h-field:     40px;   /* Input, Select */
-  --h-row:       44px;   /* Table / List row */
-  --h-appbar:    56px;   /* AppBar (Pad) */
-  --h-topbar:    56px;   /* Topbar (PDA) */
-  --h-statusbar: 24px;   /* Status bar (PDA) */
-  --h-bottombar: 48px;   /* Bottom CTA strip */
+  --h-btn:       48px;
+  --h-btn-sm:    38px;
+  --h-field:     40px;
+  --h-row:       44px;
+  --h-appbar:    56px;
+  --h-topbar:    56px;
+  --h-statusbar: 24px;
+  --h-bottombar: 48px;
 
 }
 
-/* =================================================================
-   Base resets (optional — include only when bootstrapping a page)
-   ================================================================= */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
