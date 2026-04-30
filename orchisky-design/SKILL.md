@@ -17,8 +17,8 @@ Step 1: 读取 `references/orchisky.md`（公司级主规范 V2.0，必读）
 Step 2: 根据输出轨道读取对应补充文档：
 - Word/Excel/PPT → 仅需 `references/orchisky.md`
 - PDA/Pad HTML → `references/Orchisky-Field-Design-System-V1.0.md`
-- 平台版 Demo → `references/原型设计规范-Orchisky平台版-V1.0.md`
-- 品牌版 Demo → `references/原型设计规范-V1.0.md`
+- 平台版 Demo → `references/prototype-spec-platform-V1.0.md`
+- 品牌版 Demo → `references/prototype-spec-brand-V1.0.md`
 
 Step 3: 生成内容，所有视觉输出必须 100% 符合规范。
 
