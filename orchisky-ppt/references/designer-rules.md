@@ -2,15 +2,15 @@
 
 Phase 7 每页SVG设计的执行规范。
 
-**品牌规范以 orchisky.md 为唐一权威来源。本文件不允许出现具体色値或字体名。**
+**品牌规范以 orchisky.md 为唯一权威来源。本文件不允许出现具体色值或字体名。**
 
 ---
 
 ## 画布与边距
 
-- 画布：960×540px（所有版式一贫）
-- 可用区域：内边距 40px（左右40，上下64/48）
-- 内容区：坐标以 grid-system.md 为唐一标准
+- 画布：**1280×720px**（所有版式一律）
+- 可用区域：左右各 40px，上 100px（Action Title 下方），下 30px
+- 内容区：坐标以 grid-system.md 为唯一标准
 
 ---
 
@@ -51,7 +51,7 @@ Phase 7 每页SVG设计的执行规范。
 ### 必须包含
 
 ```svg
-<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <!-- CSS变量定义，引用 orchisky.md 规范 -->
     <style>
@@ -65,9 +65,9 @@ Phase 7 每页SVG设计的执行规范。
   </defs>
   
   <!-- 白色背景 -->
-  <rect width="960" height="540" fill="white"/>
+  <rect width="1280" height="720" fill="white"/>
   
-  <!-- Chrome区域 -->
+  <!-- Chrome区域（复制自 svg-skeleton-common.md） -->
   <!-- 内容区域 -->
 </svg>
 ```

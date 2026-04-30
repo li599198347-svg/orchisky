@@ -83,3 +83,46 @@
 <text x="704" y="296" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="11" font-weight="bold" fill="#8AAED0" letter-spacing="2">STAGE 03</text>
 <text x="704" y="326" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="14" font-weight="bold" fill="#FFFFFF">[stage3_name]</text>
 ```
+
+---
+
+## E-04 架构层次图
+```svg
+<!-- 顶层（战略层）：x=240 y=140 w=800 h=100 -->
+<rect x="240" y="140" width="800" height="100" rx="4" fill="#003D7A"/>
+<text x="640" y="182" text-anchor="middle" font-family="Songti SC,SimSun,serif" font-size="20" font-weight="bold" fill="#FFFFFF">[layer1_title]</text>
+<text x="640" y="218" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="13" fill="#B8C8D8">[layer1_desc]</text>
+
+<!-- 连接线：顶→中 -->
+<line x1="640" y1="240" x2="640" y2="280" stroke="#003D7A" stroke-width="2"/>
+<polygon points="634,280 640,292 646,280" fill="#003D7A"/>
+
+<!-- 中层（管理层）：x=240 y=292 w=800 h=100 -->
+<rect x="240" y="292" width="800" height="100" rx="4" fill="#B01C1C"/>
+<text x="640" y="334" text-anchor="middle" font-family="Songti SC,SimSun,serif" font-size="20" font-weight="bold" fill="#FFFFFF">[layer2_title]</text>
+<text x="640" y="370" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="13" fill="#F0B8B8">[layer2_desc]</text>
+
+<!-- 连接线：中→底 -->
+<line x1="640" y1="392" x2="640" y2="432" stroke="#B01C1C" stroke-width="2"/>
+<polygon points="634,432 640,444 646,432" fill="#B01C1C"/>
+
+<!-- 底层（执行层）：x=240 y=444 w=800 h=100 -->
+<rect x="240" y="444" width="800" height="100" rx="4" fill="#3A7FC1"/>
+<text x="640" y="486" text-anchor="middle" font-family="Songti SC,SimSun,serif" font-size="20" font-weight="bold" fill="#FFFFFF">[layer3_title]</text>
+<text x="640" y="522" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="13" fill="#C8DCEF">[layer3_desc]</text>
+
+<!-- 左侧层级标签 -->
+<text x="220" y="200" text-anchor="end" font-family="Microsoft YaHei,sans-serif" font-size="11" fill="#003D7A" letter-spacing="2">L1</text>
+<text x="220" y="352" text-anchor="end" font-family="Microsoft YaHei,sans-serif" font-size="11" fill="#B01C1C" letter-spacing="2">L2</text>
+<text x="220" y="504" text-anchor="end" font-family="Microsoft YaHei,sans-serif" font-size="11" fill="#3A7FC1" letter-spacing="2">L3</text>
+```
+
+**占位符说明**：
+- `[layer1_title]`：顶层名称（如"战略决策层"），≤10字
+- `[layer1_desc]`：顶层说明（如"董事会 · 总裁室"），≤20字
+- `[layer2_title]`：中层名称（如"运营管理层"），≤10字
+- `[layer2_desc]`：中层说明，≤20字
+- `[layer3_title]`：底层名称（如"业务执行层"），≤10字
+- `[layer3_desc]`：底层说明，≤20字
+
+**扩展**：如需四层，在底层下方继续追加，每层高度100px，间距40px，颜色可用 `#1A7A42`（成功绿）。
